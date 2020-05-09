@@ -1,5 +1,6 @@
 package deskplaner.commands;
 
+import java.io.File;
 import java.util.Arrays;
 
 import deskplaner.main.DeskPlaner;
@@ -8,7 +9,7 @@ import deskplaner.util.Command;
 public class BrowserCommand implements Command{
 
 	@Override
-	public boolean onCommand(String label, String[] args) {
+	public boolean onCommand(String label, String[] args, File location) {
 		if (args.length >= 1) {
 			if(!Arrays.asList(args).contains("-np") && !args[0].startsWith("http://") && !args[0].startsWith("https://")) {
 				DeskPlaner.openWebsiteInBrowser("https://" + args[0]);

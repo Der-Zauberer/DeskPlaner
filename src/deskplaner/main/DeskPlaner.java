@@ -5,6 +5,9 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Scanner;
@@ -20,10 +23,12 @@ public class DeskPlaner {
 	private static final String[] AUTHORS = {"Der_Zauberer"};
 	
 	private static HashMap<String, Command> commands = new HashMap<>();
+	private static File currentlocation;
 	
 	public static void main(String[] args) {
 		registerCommand("version", new VersionCommand());
 		registerCommand("browser", new BrowserCommand());
+		inititalizeLocation();
 		console();
 	}
 	
@@ -42,6 +47,16 @@ public class DeskPlaner {
 		}).start();
 	}
 	
+	private static void inititalizeLocation() {
+		Path directory = Paths.get(getDeskPlanerLocation().toString(), "DeskPlaner", "home");
+		if(!Files.exists(directory)) {
+			try {
+				Files.createDirectories(directory);
+			} catch (IOException exception) {}
+		}
+		setCurrentLocation(directory.toFile());
+	}
+	
 	public static void sendConsoleOutput(Object object) {
 		System.out.println(object);
 	}
@@ -52,17 +67,25 @@ public class DeskPlaner {
 	
 	public static boolean executeCommand(String label, String args[]) {
 		if(commands.containsKey(label)) {
-			if(args[0].length() > 0 && args[0].equalsIgnoreCase("help")) {
+			if(args.length > 0 && args[0].equalsIgnoreCase("help")) {
 				sendConsoleOutput(commands.get(label).onCommandHelp());
 				return true;
 			}
-			return commands.get(label).onCommand(label, args);
+			return commands.get(label).onCommand(label, args, getCurrentLocation());
 		}
 		return false;
 	}
 	
 	public static HashMap<String, Command> getCommands() {
 		return commands;
+	}
+	
+	public static void setCurrentLocation(File currentlocation) {
+		DeskPlaner.currentlocation = currentlocation;
+	}
+	
+	public static File getCurrentLocation() {
+		return currentlocation;
 	}
 	
 	public static void openWebsiteInBrowser(String url) {
@@ -79,6 +102,18 @@ public class DeskPlaner {
 		} catch (IOException exception) {
 			exception.printStackTrace();
 		}
+	}
+	
+	public static File getDeskPlanerLocation() {
+		File file = null;
+		try {
+			 file = new File(DeskPlaner.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath());
+		} catch (URISyntaxException exception) {}
+		if(file.getName().endsWith(".jar")) {
+			return file.getParentFile();
+		}
+		return file;
+		
 	}
 	
 	public static String getName() {
