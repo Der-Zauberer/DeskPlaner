@@ -12,4 +12,9 @@ public class VersionCommand implements Command {
 		return true;
 	}
 
+	@Override
+	public String onCommandHelp() {
+		return "Dipslay the current version of the DeskPlaner.";
+	}
+
 }

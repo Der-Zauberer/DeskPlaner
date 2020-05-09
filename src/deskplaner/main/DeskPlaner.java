@@ -1,8 +1,14 @@
 package deskplaner.main;
 
+import java.awt.Desktop;
+import java.io.File;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Scanner;
+import deskplaner.commands.BrowserCommand;
 import deskplaner.commands.VersionCommand;
 import deskplaner.util.Command;
 
@@ -17,6 +23,7 @@ public class DeskPlaner {
 	
 	public static void main(String[] args) {
 		registerCommand("version", new VersionCommand());
+		registerCommand("browser", new BrowserCommand());
 		console();
 	}
 	
@@ -45,6 +52,10 @@ public class DeskPlaner {
 	
 	public static boolean executeCommand(String label, String args[]) {
 		if(commands.containsKey(label)) {
+			if(args[0].length() > 0 && args[0].equalsIgnoreCase("help")) {
+				sendConsoleOutput(commands.get(label).onCommandHelp());
+				return true;
+			}
 			return commands.get(label).onCommand(label, args);
 		}
 		return false;
@@ -52,6 +63,22 @@ public class DeskPlaner {
 	
 	public static HashMap<String, Command> getCommands() {
 		return commands;
+	}
+	
+	public static void openWebsiteInBrowser(String url) {
+		try {
+			Desktop.getDesktop().browse(new URL(url).toURI());
+		} catch (IOException | URISyntaxException exception) {
+			exception.printStackTrace();
+		}
+	}
+	
+	public static void openFileInBrowser(File file) {
+		try {
+			Desktop.getDesktop().open(file);
+		} catch (IOException exception) {
+			exception.printStackTrace();
+		}
 	}
 	
 	public static String getName() {
