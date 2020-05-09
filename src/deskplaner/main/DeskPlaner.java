@@ -12,6 +12,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Scanner;
 import deskplaner.commands.BrowserCommand;
+import deskplaner.commands.CDCommand;
+import deskplaner.commands.LSCommand;
 import deskplaner.commands.VersionCommand;
 import deskplaner.util.Command;
 
@@ -28,6 +30,8 @@ public class DeskPlaner {
 	public static void main(String[] args) {
 		registerCommand("version", new VersionCommand());
 		registerCommand("browser", new BrowserCommand());
+		registerCommand("cd", new CDCommand());
+		registerCommand("ls", new LSCommand());
 		inititalizeLocation();
 		console();
 	}
@@ -37,7 +41,10 @@ public class DeskPlaner {
 		new Thread(() -> {
 			Scanner scanner = new Scanner(System.in);
 			while (true) {
-				System.out.print("DeskPlaner/home~ ");
+				String location = getCurrentLocation().toString();
+				String currentlocation = location.substring(getDeskPlanerLocation().toString().length() + 1);
+				currentlocation = currentlocation.replace("\\", "/");
+				System.out.print(currentlocation + "~ ");
 				String input = scanner.nextLine();
 				String command[] = input.split(" ");
 				String label = command[0];
@@ -68,7 +75,7 @@ public class DeskPlaner {
 	public static boolean executeCommand(String label, String args[]) {
 		if(commands.containsKey(label)) {
 			if(args.length > 0 && args[0].equalsIgnoreCase("help")) {
-				sendConsoleOutput(commands.get(label).onCommandHelp());
+				sendConsoleOutput(commands.get(label).getCommandHelp());
 				return true;
 			}
 			return commands.get(label).onCommand(label, args, getCurrentLocation());
@@ -96,7 +103,7 @@ public class DeskPlaner {
 		}
 	}
 	
-	public static void openFileInBrowser(File file) {
+	public static void openFile(File file) {
 		try {
 			Desktop.getDesktop().open(file);
 		} catch (IOException exception) {

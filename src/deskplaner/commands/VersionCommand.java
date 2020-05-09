@@ -14,7 +14,7 @@ public class VersionCommand implements Command {
 	}
 
 	@Override
-	public String onCommandHelp() {
+	public String getCommandHelp() {
 		return "Dipslay the current version of the DeskPlaner.";
 	}
 

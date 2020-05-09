@@ -2,7 +2,6 @@ package deskplaner.commands;
 
 import java.io.File;
 import java.util.Arrays;
-
 import deskplaner.main.DeskPlaner;
 import deskplaner.util.Command;
 
@@ -22,11 +21,11 @@ public class BrowserCommand implements Command{
 	}
 
 	@Override
-	public String onCommandHelp() {
+	public String getCommandHelp() {
 		String string = "browser [url] Open a website in the mainbrowser of the operating system.\n";
 		string += "url\tString\t\tThe url to open the website\n";
 		string += "-np\tModifier\tBypass automatic https or http protocoll (No Protocoll)";
 		return string;
 	}
-
+	
 }
