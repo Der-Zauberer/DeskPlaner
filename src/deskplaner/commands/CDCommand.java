@@ -27,7 +27,7 @@ public class CDCommand implements Command {
 				DeskPlaner.sendConsoleOutput("Directory does not exist!");
 			}
 		}
-		return false;
+		return true;
 	}
 
 	@Override

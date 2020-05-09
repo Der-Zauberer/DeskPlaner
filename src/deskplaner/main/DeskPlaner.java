@@ -8,6 +8,7 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Scanner;
@@ -15,7 +16,9 @@ import deskplaner.commands.BrowserCommand;
 import deskplaner.commands.CDCommand;
 import deskplaner.commands.LSCommand;
 import deskplaner.commands.VersionCommand;
+import deskplaner.tool.Notes;
 import deskplaner.util.Command;
+import deskplaner.util.Tool;
 
 public class DeskPlaner {
 	
@@ -25,6 +28,7 @@ public class DeskPlaner {
 	private static final String[] AUTHORS = {"Der_Zauberer"};
 	
 	private static HashMap<String, Command> commands = new HashMap<>();
+	private static ArrayList<Tool> tools = new ArrayList<>();
 	private static File currentlocation;
 	
 	public static void main(String[] args) {
@@ -32,6 +36,7 @@ public class DeskPlaner {
 		registerCommand("browser", new BrowserCommand());
 		registerCommand("cd", new CDCommand());
 		registerCommand("ls", new LSCommand());
+		registerTool(new Notes());
 		inititalizeLocation();
 		console();
 	}
@@ -81,6 +86,15 @@ public class DeskPlaner {
 			return commands.get(label).onCommand(label, args, getCurrentLocation());
 		}
 		return false;
+	}
+	
+	public static void registerTool(Tool tool) {
+		tools.add(tool);
+		registerCommand(Tool.getName().toLowerCase(), tool);
+	}
+	
+	public static ArrayList<Tool> getTools() {
+		return tools;
 	}
 	
 	public static HashMap<String, Command> getCommands() {
