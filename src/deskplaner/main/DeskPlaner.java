@@ -5,9 +5,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -29,7 +26,7 @@ public class DeskPlaner {
 	
 	private static HashMap<String, Command> commands = new HashMap<>();
 	private static ArrayList<Tool> tools = new ArrayList<>();
-	private static File currentlocation;
+	private static File currentdestination;
 	
 	public static void main(String[] args) {
 		registerCommand("version", new VersionCommand());
@@ -47,7 +44,7 @@ public class DeskPlaner {
 			Scanner scanner = new Scanner(System.in);
 			while (true) {
 				String location = getCurrentLocation().toString();
-				String currentlocation = location.substring(getDeskPlanerLocation().toString().length() + 1);
+				String currentlocation = location.substring(getDeskPlanerLocation().getParentFile().toString().length() + 1);
 				currentlocation = currentlocation.replace("\\", "/");
 				System.out.print(currentlocation + "~ ");
 				String input = scanner.nextLine();
@@ -60,13 +57,11 @@ public class DeskPlaner {
 	}
 	
 	private static void inititalizeLocation() {
-		Path directory = Paths.get(getDeskPlanerLocation().toString(), "DeskPlaner", "home");
-		if(!Files.exists(directory)) {
-			try {
-				Files.createDirectories(directory);
-			} catch (IOException exception) {}
+		File file = new File(getDeskPlanerLocation().toString() + "\\home");
+		if(!file.exists()) {
+			file.mkdirs();
 		}
-		setCurrentLocation(directory.toFile());
+		currentdestination = file;
 	}
 	
 	public static void sendConsoleOutput(Object object) {
@@ -90,7 +85,7 @@ public class DeskPlaner {
 	
 	public static void registerTool(Tool tool) {
 		tools.add(tool);
-		registerCommand(Tool.getName().toLowerCase(), tool);
+		registerCommand(tool.getName().toLowerCase(), tool);
 	}
 	
 	public static ArrayList<Tool> getTools() {
@@ -101,12 +96,12 @@ public class DeskPlaner {
 		return commands;
 	}
 	
-	public static void setCurrentLocation(File currentlocation) {
-		DeskPlaner.currentlocation = currentlocation;
+	public static void setCurrentLocation(File destination) {
+		DeskPlaner.currentdestination = destination;
 	}
 	
 	public static File getCurrentLocation() {
-		return currentlocation;
+		return currentdestination;
 	}
 	
 	public static void openWebsiteInBrowser(String url) {
@@ -133,6 +128,7 @@ public class DeskPlaner {
 		if(file.getName().endsWith(".jar")) {
 			return file.getParentFile();
 		}
+		file = new File(file.toString() + "\\DeskPlaner");
 		return file;
 		
 	}

@@ -2,22 +2,35 @@ package deskplaner.util;
 
 import java.io.File;
 
+import deskplaner.main.DeskPlaner;
+
 public abstract class Tool implements Command {
 	
-	private static String name;
+	private String name;
 	
 	public Tool(String name) {
-		Tool.name = name;
+		this.name = name;
+		if(!getToolDestination().exists()) {
+			getToolDestination().mkdirs();
+		}
 	}
 
 	@Override
-	public abstract boolean onCommand(String label, String[] args, File location);
+	public abstract boolean onCommand(String label, String[] args, File destination);
 
 	@Override
 	public abstract String getCommandHelp();
 	
-	public static String getName() {
+	public String getName() {
 		return name;
+	}
+	
+	public File getToolDestination() {
+		File file = new File(DeskPlaner.getDeskPlanerLocation().toString() + "\\tools\\" + name);
+		if(!file.exists()) {
+			file.mkdirs();
+		}
+		return file;
 	}
 
 }
