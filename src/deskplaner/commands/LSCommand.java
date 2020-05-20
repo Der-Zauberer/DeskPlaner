@@ -7,8 +7,8 @@ import deskplaner.util.Command;
 public class LSCommand implements Command {
 
 	@Override
-	public boolean onCommand(String label, String[] args, File destination) {
-		File[] file = destination.listFiles();
+	public boolean onCommand(String label, String[] args, File directory) {
+		File[] file = directory.listFiles();
 		if(file.length == 0) {
 			DeskPlaner.sendConsoleOutput("No files or folders in directory.");
 			return true;

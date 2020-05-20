@@ -12,6 +12,8 @@ import java.util.Scanner;
 import deskplaner.commands.BrowserCommand;
 import deskplaner.commands.CDCommand;
 import deskplaner.commands.LSCommand;
+import deskplaner.commands.MkDirCommand;
+import deskplaner.commands.RMCommand;
 import deskplaner.commands.VersionCommand;
 import deskplaner.tool.Notes;
 import deskplaner.util.Command;
@@ -29,10 +31,12 @@ public class DeskPlaner {
 	private static File currentdestination;
 	
 	public static void main(String[] args) {
-		registerCommand("version", new VersionCommand());
 		registerCommand("browser", new BrowserCommand());
 		registerCommand("cd", new CDCommand());
 		registerCommand("ls", new LSCommand());
+		registerCommand("mkdir", new MkDirCommand());
+		registerCommand("rm", new RMCommand());
+		registerCommand("version", new VersionCommand());
 		registerTool(new Notes());
 		inititalizeLocation();
 		console();

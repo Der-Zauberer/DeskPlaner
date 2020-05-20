@@ -10,7 +10,7 @@ import deskplaner.util.Command;
 public class CDCommand implements Command {
 
 	@Override
-	public boolean onCommand(String label, String[] args, File destination) {
+	public boolean onCommand(String label, String[] args, File directory) {
 		if(args.length == 0) {
 			DeskPlaner.sendConsoleOutput("Arguments required!");
 			DeskPlaner.sendConsoleOutput(getCommandHelp());
@@ -18,15 +18,15 @@ public class CDCommand implements Command {
 			DeskPlaner.sendConsoleOutput("Directory does not exist!");
 		} else {
 			if(args[0].equalsIgnoreCase("..")) {
-				if(DeskPlaner.getDeskPlanerLocation().equals(destination)) {
+				if(DeskPlaner.getDeskPlanerLocation().equals(directory)) {
 					DeskPlaner.sendConsoleOutput("Directory does not exist!");
 					return true;
 				}
 				DeskPlaner.setCurrentLocation(DeskPlaner.getCurrentLocation().getParentFile());
-			} else if(args[0].startsWith("/") && new File(destination.toString() + args[0].replace("/", "\\")).exists()) {
-				DeskPlaner.setCurrentLocation(new File(destination.toString() + args[0].replace("/", "\\")));
-			} else if(Files.exists(Paths.get(destination.toString(), args[0]))) {
-				DeskPlaner.setCurrentLocation(new File(destination.toString(), args[0]));
+			} else if(args[0].startsWith("/") && new File(directory.toString() + args[0].replace("/", "\\")).exists()) {
+				DeskPlaner.setCurrentLocation(new File(directory.toString() + args[0].replace("/", "\\")));
+			} else if(Files.exists(Paths.get(directory.toString(), args[0]))) {
+				DeskPlaner.setCurrentLocation(new File(directory.toString(), args[0]));
 			} else {
 				DeskPlaner.sendConsoleOutput("Directory does not exist!");
 			}

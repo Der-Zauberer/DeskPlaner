@@ -16,7 +16,7 @@ public abstract class Tool implements Command {
 	}
 
 	@Override
-	public abstract boolean onCommand(String label, String[] args, File destination);
+	public abstract boolean onCommand(String label, String[] args, File directory);
 
 	@Override
 	public abstract String getCommandHelp();
