@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Scanner;
@@ -15,13 +14,14 @@ import deskplaner.commands.LSCommand;
 import deskplaner.commands.MkDirCommand;
 import deskplaner.commands.RMCommand;
 import deskplaner.commands.VersionCommand;
-import deskplaner.tool.Notes;
 import deskplaner.util.ColorsANSI;
 import deskplaner.util.Command;
 import deskplaner.util.Notification;
-import deskplaner.util.Tool;
+import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 
-public class DeskPlaner {
+public class DeskPlaner extends Application {
 	
 	private static final String NAME = "DeskPlaner";
 	private static final int VERSION = 0;
@@ -29,9 +29,10 @@ public class DeskPlaner {
 	private static final String[] AUTHORS = {"Der_Zauberer"};
 	
 	private static boolean colorproperty = true;
+	private static boolean guiproperty = true;
 	
+	private static Stage stage;
 	private static HashMap<String, Command> commands = new HashMap<>();
-	private static ArrayList<Tool> tools = new ArrayList<>();
 	private static File currentdirectory;
 	
 	public static void main(String[] args) {
@@ -44,20 +45,36 @@ public class DeskPlaner {
 		registerCommand("mkdir", new MkDirCommand());
 		registerCommand("rm", new RMCommand());
 		registerCommand("version", new VersionCommand());
-		registerTool(new Notes());
 		inititalizeLocation();
 		console();
+		if(guiproperty)	launch();
+	}
+	
+	@Override
+	public void start(Stage stage) throws Exception {
+		stage = new Stage();
+		this.stage = stage;
+		stage.setTitle(getName());
+		stage.setHeight(720);
+		stage.setWidth(1020);
+		stage.show();
 	}
 	
 	@SuppressWarnings("resource")
 	private static void console() {
 		new Thread(() -> {
+			String prefix = "";
+			String suffix = "";
+			if(colorproperty) {
+				prefix = ColorsANSI.YELLOW;
+				suffix = ColorsANSI.RESET;
+			}
 			Scanner scanner = new Scanner(System.in);
 			while (true) {
 				String location = getCurrentDirectory().toString();
 				String currentlocation = location.substring(getDeskPlanerLocation().getParentFile().toString().length() + 1);
 				currentlocation = currentlocation.replace("\\", "/");
-				System.out.print(currentlocation + "~ ");
+				System.out.print(prefix + currentlocation + "~ " + suffix);
 				String input = scanner.nextLine();
 				String command[] = input.split(" ");
 				String label = command[0];
@@ -111,15 +128,6 @@ public class DeskPlaner {
 		return false;
 	}
 	
-	public static void registerTool(Tool tool) {
-		tools.add(tool);
-		registerCommand(tool.getName().toLowerCase(), tool);
-	}
-	
-	public static ArrayList<Tool> getTools() {
-		return tools;
-	}
-	
 	public static HashMap<String, Command> getCommands() {
 		return commands;
 	}
@@ -159,6 +167,14 @@ public class DeskPlaner {
 		file = new File(file.toString() + "\\DeskPlaner");
 		return file;
 		
+	}
+	
+	public static void setScene(Scene scene) {
+		stage.setScene(scene);
+	}
+	
+	public static Scene getScene() {
+		return stage.getScene();
 	}
 	
 	public static String getName() {
