@@ -16,7 +16,9 @@ import deskplaner.commands.MkDirCommand;
 import deskplaner.commands.RMCommand;
 import deskplaner.commands.VersionCommand;
 import deskplaner.tool.Notes;
+import deskplaner.util.ColorsANSI;
 import deskplaner.util.Command;
+import deskplaner.util.Notification;
 import deskplaner.util.Tool;
 
 public class DeskPlaner {
@@ -26,11 +28,16 @@ public class DeskPlaner {
 	private static final boolean BETA = true;
 	private static final String[] AUTHORS = {"Der_Zauberer"};
 	
+	private static boolean colorproperty = true;
+	
 	private static HashMap<String, Command> commands = new HashMap<>();
 	private static ArrayList<Tool> tools = new ArrayList<>();
-	private static File currentdestination;
+	private static File currentdirectory;
 	
 	public static void main(String[] args) {
+		if(System.getProperty("os.name").toLowerCase().contains("windows")) {
+			colorproperty = false;
+		}
 		registerCommand("browser", new BrowserCommand());
 		registerCommand("cd", new CDCommand());
 		registerCommand("ls", new LSCommand());
@@ -47,7 +54,7 @@ public class DeskPlaner {
 		new Thread(() -> {
 			Scanner scanner = new Scanner(System.in);
 			while (true) {
-				String location = getCurrentLocation().toString();
+				String location = getCurrentDirectory().toString();
 				String currentlocation = location.substring(getDeskPlanerLocation().getParentFile().toString().length() + 1);
 				currentlocation = currentlocation.replace("\\", "/");
 				System.out.print(currentlocation + "~ ");
@@ -65,11 +72,28 @@ public class DeskPlaner {
 		if(!file.exists()) {
 			file.mkdirs();
 		}
-		currentdestination = file;
+		currentdirectory = file;
 	}
 	
 	public static void sendConsoleOutput(Object object) {
 		System.out.println(object);
+	}
+	
+	public static void sendConsoleOutput(Object object, int importance) {
+		if(colorproperty == true) {
+			String color = null;
+			switch (importance) {
+			case Notification.INFO:	color = ColorsANSI.CYAN; break;
+			case Notification.SUCCESS: color = ColorsANSI.GREEN; break;
+			case Notification.WARNING: color = ColorsANSI.YELLOW; break;
+			case Notification.ERROR: color = ColorsANSI.RED; break;
+			default: color = ColorsANSI.RESET; break;
+			}
+			sendConsoleOutput(color + object.toString() + ColorsANSI.RESET);
+		} else {
+			sendConsoleOutput(object);
+		}
+		
 	}
 	
 	public static void registerCommand(String label, Command command) {
@@ -82,7 +106,7 @@ public class DeskPlaner {
 				sendConsoleOutput(commands.get(label).getCommandHelp());
 				return true;
 			}
-			return commands.get(label).onCommand(label, args, getCurrentLocation());
+			return commands.get(label).onCommand(label, args, getCurrentDirectory());
 		}
 		return false;
 	}
@@ -100,12 +124,12 @@ public class DeskPlaner {
 		return commands;
 	}
 	
-	public static void setCurrentLocation(File destination) {
-		DeskPlaner.currentdestination = destination;
+	public static void setCurrentDirectory(File directory) {
+		DeskPlaner.currentdirectory = directory;
 	}
 	
-	public static File getCurrentLocation() {
-		return currentdestination;
+	public static File getCurrentDirectory() {
+		return currentdirectory;
 	}
 	
 	public static void openWebsiteInBrowser(String url) {

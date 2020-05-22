@@ -6,32 +6,35 @@ import java.nio.file.Paths;
 
 import deskplaner.main.DeskPlaner;
 import deskplaner.util.Command;
+import deskplaner.util.Notification;
 
 public class CDCommand implements Command {
 
 	@Override
 	public boolean onCommand(String label, String[] args, File directory) {
 		if(args.length == 0) {
-			DeskPlaner.sendConsoleOutput("Arguments required!");
 			DeskPlaner.sendConsoleOutput(getCommandHelp());
 		} else if(args[0].equalsIgnoreCase(".")){
-			DeskPlaner.sendConsoleOutput("Directory does not exist!");
+			DeskPlaner.sendConsoleOutput("Directory does not exist!", Notification.ERROR);
 		} else {
 			if(args[0].equalsIgnoreCase("..")) {
 				if(DeskPlaner.getDeskPlanerLocation().equals(directory)) {
-					DeskPlaner.sendConsoleOutput("Directory does not exist!");
+					DeskPlaner.sendConsoleOutput("Directory does not exist!", Notification.ERROR);
 					return true;
 				}
-				DeskPlaner.setCurrentLocation(DeskPlaner.getCurrentLocation().getParentFile());
+				DeskPlaner.setCurrentDirectory(DeskPlaner.getCurrentDirectory().getParentFile());
+				return true;
 			} else if(args[0].startsWith("/") && new File(directory.toString() + args[0].replace("/", "\\")).exists()) {
-				DeskPlaner.setCurrentLocation(new File(directory.toString() + args[0].replace("/", "\\")));
+				DeskPlaner.setCurrentDirectory(new File(directory.toString() + args[0].replace("/", "\\")));
+				return true;
 			} else if(Files.exists(Paths.get(directory.toString(), args[0]))) {
-				DeskPlaner.setCurrentLocation(new File(directory.toString(), args[0]));
+				DeskPlaner.setCurrentDirectory(new File(directory.toString(), args[0]));
+				return true;
 			} else {
-				DeskPlaner.sendConsoleOutput("Directory does not exist!");
+				DeskPlaner.sendConsoleOutput("Directory does not exist!", Notification.ERROR);
 			}
 		}
-		return true;
+		return false;
 	}
 
 	@Override

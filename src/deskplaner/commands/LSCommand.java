@@ -3,6 +3,7 @@ package deskplaner.commands;
 import java.io.File;
 import deskplaner.main.DeskPlaner;
 import deskplaner.util.Command;
+import deskplaner.util.Notification;
 
 public class LSCommand implements Command {
 
@@ -10,8 +11,8 @@ public class LSCommand implements Command {
 	public boolean onCommand(String label, String[] args, File directory) {
 		File[] file = directory.listFiles();
 		if(file.length == 0) {
-			DeskPlaner.sendConsoleOutput("No files or folders in directory.");
-			return true;
+			DeskPlaner.sendConsoleOutput("No files or folders in directory.", Notification.ERROR);
+			return false;
 		}
 		String directories = "";
 		String files = "";

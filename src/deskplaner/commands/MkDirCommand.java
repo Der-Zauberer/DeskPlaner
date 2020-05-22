@@ -4,20 +4,25 @@ import java.io.File;
 
 import deskplaner.main.DeskPlaner;
 import deskplaner.util.Command;
+import deskplaner.util.Notification;
 
 public class MkDirCommand implements Command {
 
 	@Override
 	public boolean onCommand(String label, String[] args, File directory) {
+		if(args.length == 0) {
+			DeskPlaner.sendConsoleOutput(getCommandHelp());
+		}
 		if(args.length == 1) {
 			boolean success = new File(directory + "\\" + args[0]).mkdir();
 			if(!success) {
-				DeskPlaner.sendConsoleOutput("Could not create directory!");
+				DeskPlaner.sendConsoleOutput("Could not create directory!", Notification.ERROR);
 			} else {
-				DeskPlaner.sendConsoleOutput("The directory " + args[0] + " was created!");
+				DeskPlaner.sendConsoleOutput("The directory " + args[0] + " was created!", Notification.SUCCESS);
+				return true;
 			}
 		}
-		return true;
+		return false;
 	}
 
 	@Override

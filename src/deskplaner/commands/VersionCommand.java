@@ -10,6 +10,7 @@ public class VersionCommand implements Command {
 	public boolean onCommand(String label, String args[], File directory) {
 		DeskPlaner.sendConsoleOutput(DeskPlaner.getName() + " v" + DeskPlaner.getVersion());
 		DeskPlaner.sendConsoleOutput("By " + DeskPlaner.getAuthorsAsString());
+		DeskPlaner.sendConsoleOutput("Running DeskPlaner on " + System.getProperty("os.name"));
 		return true;
 	}
 
