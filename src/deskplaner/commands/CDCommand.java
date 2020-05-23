@@ -18,7 +18,7 @@ public class CDCommand implements Command {
 			DeskPlaner.sendConsoleOutput("Directory does not exist!", Notification.ERROR);
 		} else {
 			if(args[0].equalsIgnoreCase("..")) {
-				if(DeskPlaner.getDeskPlanerLocation().equals(directory)) {
+				if(DeskPlaner.getDeskPlanerDirectory().equals(directory)) {
 					DeskPlaner.sendConsoleOutput("Directory does not exist!", Notification.ERROR);
 					return true;
 				}

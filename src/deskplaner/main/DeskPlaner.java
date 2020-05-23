@@ -14,6 +14,7 @@ import deskplaner.commands.LSCommand;
 import deskplaner.commands.MkDirCommand;
 import deskplaner.commands.RMCommand;
 import deskplaner.commands.VersionCommand;
+import deskplaner.scenes.Editor;
 import deskplaner.util.ColorsANSI;
 import deskplaner.util.Command;
 import deskplaner.util.Notification;
@@ -45,7 +46,7 @@ public class DeskPlaner extends Application {
 		registerCommand("mkdir", new MkDirCommand());
 		registerCommand("rm", new RMCommand());
 		registerCommand("version", new VersionCommand());
-		inititalizeLocation();
+		inititalizeDirectory();
 		console();
 		if(guiproperty)	launch();
 	}
@@ -53,7 +54,8 @@ public class DeskPlaner extends Application {
 	@Override
 	public void start(Stage stage) throws Exception {
 		stage = new Stage();
-		this.stage = stage;
+		DeskPlaner.stage = stage;
+		stage.setScene(new Editor());
 		stage.setTitle(getName());
 		stage.setHeight(720);
 		stage.setWidth(1020);
@@ -72,7 +74,7 @@ public class DeskPlaner extends Application {
 			Scanner scanner = new Scanner(System.in);
 			while (true) {
 				String location = getCurrentDirectory().toString();
-				String currentlocation = location.substring(getDeskPlanerLocation().getParentFile().toString().length() + 1);
+				String currentlocation = location.substring(getDeskPlanerDirectory().getParentFile().toString().length() + 1);
 				currentlocation = currentlocation.replace("\\", "/");
 				System.out.print(prefix + currentlocation + "~ " + suffix);
 				String input = scanner.nextLine();
@@ -84,8 +86,8 @@ public class DeskPlaner extends Application {
 		}).start();
 	}
 	
-	private static void inititalizeLocation() {
-		File file = new File(getDeskPlanerLocation().toString() + "\\home");
+	private static void inititalizeDirectory() {
+		File file = new File(getDeskPlanerDirectory().toString() + "\\home");
 		if(!file.exists()) {
 			file.mkdirs();
 		}
@@ -156,7 +158,7 @@ public class DeskPlaner extends Application {
 		}
 	}
 	
-	public static File getDeskPlanerLocation() {
+	public static File getDeskPlanerDirectory() {
 		File file = null;
 		try {
 			 file = new File(DeskPlaner.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath());
@@ -165,8 +167,23 @@ public class DeskPlaner extends Application {
 			return file.getParentFile();
 		}
 		file = new File(file.toString() + "\\DeskPlaner");
+		return file;	
+	}
+	
+	public static File getDirectory(String url) {
+		File file = new File(DeskPlaner.getDeskPlanerDirectory().toString() + url);
+		if(!file.exists()) {
+			return null;
+		}
 		return file;
-		
+	}
+	
+	public static File[] getFiles(File directory) {
+		return directory.listFiles();
+	}
+	
+	public static File[] getFiles(File directory, String ending) {
+		return directory.listFiles((dir, name) -> name.toLowerCase().endsWith(ending));
 	}
 	
 	public static void setScene(Scene scene) {
