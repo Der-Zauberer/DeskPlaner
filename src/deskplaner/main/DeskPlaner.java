@@ -195,27 +195,35 @@ public class DeskPlaner extends Application {
 		try {
 			BufferedWriter writer = Files.newBufferedWriter(Paths.get(file.getParent(), file.getName()), Charset.forName("UTF-8"));
 			String lines[] = string.split("\n");
-			for (int i = 0; i < lines.length; i++) {
+			for (int i = 0; i < lines.length - 1; i++) {
+				writer.write(lines[i]);
 				writer.newLine();
-				writer.write(string);
 			}
+			writer.write(lines[lines.length - 1]);
+			writer.close();
 		} catch (IOException exception) {
 			exception.printStackTrace();
 		}
 	}
 	
 	public static String loadStringFromFile(File file) {
-		String string = null;
+		String string = "";
 		try {
 			BufferedReader reader = Files.newBufferedReader(Paths.get(file.getParent(), file.getName()), Charset.forName("UTF-8"));
 			String line;
 			while((line = reader.readLine()) != null){
-				string += "\n" + line;
+				string += line + "\n";
 			}
+			if(string.contains("\n")) string = string.substring(0, string.length() - 2);
+			reader.close();
 		} catch (IOException exception) {
 			exception.printStackTrace();
 		}
 		return string;
+	}
+	
+	public static Stage getStage() {
+		return stage;
 	}
 	
 	public static void setScene(Scene scene) {
