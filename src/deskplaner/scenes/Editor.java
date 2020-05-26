@@ -1,10 +1,10 @@
 package deskplaner.scenes;
 
 import java.io.File;
+import deskplaner.gui.Navigation;
 import deskplaner.main.DeskPlaner;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
@@ -13,7 +13,6 @@ import javafx.scene.control.TabPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 
 public class Editor extends Scene {
@@ -22,16 +21,16 @@ public class Editor extends Scene {
 	
 	private static BorderPane borderpane = new BorderPane();
 	private static ToolBar toolbar = new ToolBar();
-	private static VBox vbox = new VBox();
+	private static Navigation navigation = new Navigation();
 	private static TabPane tabpane = new TabPane();
 	
 	public Editor() {
 		super(borderpane);
 		borderpane.setTop(toolbar);
-		borderpane.setLeft(vbox);
+		borderpane.setLeft(navigation);
 		borderpane.setCenter(tabpane);
 		initializeToolBar();
-		initializeHBox();
+		initializeNavigation();
 	}
 
 	private void initializeToolBar() {
@@ -45,8 +44,10 @@ public class Editor extends Scene {
 			if(file != null) addTab(file);
 		});
 		addButton("Refresh", event -> {
-			File file = new File(DeskPlaner.getDirectory("\\home").toString() + "\\" + tabpane.getSelectionModel().getSelectedItem().getText());
-			textarea.setText(DeskPlaner.loadStringFromFile(file));
+			if(!tabpane.getSelectionModel().isEmpty()) {
+				File file = new File(DeskPlaner.getDirectory("\\home").toString() + "\\" + tabpane.getSelectionModel().getSelectedItem().getText());
+				textarea.setText(DeskPlaner.loadStringFromFile(file));
+			}
 		});
 		addButton("Save", event -> {
 			if(!tabpane.getSelectionModel().isEmpty()) {
@@ -55,31 +56,26 @@ public class Editor extends Scene {
 			}
 		});
 		addButton("Save As", event -> {
-			FileChooser fileChooser = new FileChooser();
-			fileChooser.setTitle("Save As");
-			fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt"));
-			fileChooser.setInitialFileName(tabpane.getSelectionModel().getSelectedItem().getText());
-			File file = fileChooser.showSaveDialog(DeskPlaner.getStage());
-			if(file != null) DeskPlaner.saveStringToFile(file, textarea.getText());
+			if(!tabpane.getSelectionModel().isEmpty()) {
+				FileChooser fileChooser = new FileChooser();
+				fileChooser.setTitle("Save As");
+				fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt"));
+				fileChooser.setInitialFileName(tabpane.getSelectionModel().getSelectedItem().getText());
+				File file = fileChooser.showSaveDialog(DeskPlaner.getStage());
+				if(file != null) DeskPlaner.saveStringToFile(file, textarea.getText());
+			}
 		});
 		
 	}
 	
-	private static void initializeHBox() {
-		vbox.setPrefWidth(250);
-		vbox.setPrefHeight(200);
-		vbox.setPadding(new Insets(20));
+	private void initializeNavigation() {
 		File files[] = DeskPlaner.getFiles(DeskPlaner.getDirectory("\\home"));
 		for (int i = 0; i < files.length; i++) {
 			File file = files[i];
-			Button button = new Button(file.getName());
-			button.setPrefHeight(40);
-			button.setPrefWidth(210);
-			vbox.getChildren().add(button);
-			button.setOnAction(event -> {
+			navigation.addButton(file.getName(), event -> {
 				boolean tabexist = false;
 				for (Tab tab : tabpane.getTabs()) {
-					if(tab.getText().equals(button.getText())) {
+					if(tab.getText().equals(file.getName())) {
 						tabpane.getSelectionModel().select(tab);
 						textarea.setText(DeskPlaner.loadStringFromFile(file));
 						tabexist = true;

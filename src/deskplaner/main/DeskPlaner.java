@@ -214,7 +214,6 @@ public class DeskPlaner extends Application {
 			while((line = reader.readLine()) != null){
 				string += line + "\n";
 			}
-			if(string.contains("\n")) string = string.substring(0, string.length() - 2);
 			reader.close();
 		} catch (IOException exception) {
 			exception.printStackTrace();
