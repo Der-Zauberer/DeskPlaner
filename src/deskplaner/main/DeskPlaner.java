@@ -38,8 +38,8 @@ public class DeskPlaner extends Application {
 	private static boolean guiproperty = true;
 	
 	private static Stage stage;
-	private static HashMap<String, Command> commands = new HashMap<>();
 	private static File currentdirectory;
+	private static HashMap<String, Command> commands = new HashMap<>();
 	
 	public static void main(String[] args) {
 		if(System.getProperty("os.name").toLowerCase().contains("windows")) {
@@ -51,7 +51,8 @@ public class DeskPlaner extends Application {
 		registerCommand("mkdir", new MkDirCommand());
 		registerCommand("rm", new RMCommand());
 		registerCommand("version", new VersionCommand());
-		inititalizeDirectory();
+		currentdirectory = inititalizeDirectory("home");
+		inititalizeDirectory("tools");
 		console();
 		if(guiproperty)	launch();
 	}
@@ -89,14 +90,6 @@ public class DeskPlaner extends Application {
 				executeCommand(label, args);
 			}
 		}).start();
-	}
-	
-	private static void inititalizeDirectory() {
-		File file = new File(getDeskPlanerDirectory().toString() + "\\home");
-		if(!file.exists()) {
-			file.mkdirs();
-		}
-		currentdirectory = file;
 	}
 	
 	public static void sendConsoleOutput(Object object) {
@@ -155,6 +148,15 @@ public class DeskPlaner extends Application {
 		}
 	}
 	
+	public static File inititalizeDirectory(String path) {
+		if(!path.startsWith("\\")) path = "\\" + path;
+		File file = new File(getDeskPlanerDirectory().toString() + path);
+		if(!file.exists()) {
+			file.mkdirs();
+		}
+		return file;
+	}
+	
 	public static void openFile(File file) {
 		try {
 			Desktop.getDesktop().open(file);
@@ -175,8 +177,9 @@ public class DeskPlaner extends Application {
 		return file;	
 	}
 	
-	public static File getDirectory(String url) {
-		File file = new File(DeskPlaner.getDeskPlanerDirectory().toString() + url);
+	public static File getDirectory(String path) {
+		if(!path.startsWith("\\")) path = "\\" + path;
+		File file = new File(DeskPlaner.getDeskPlanerDirectory().toString() + path);
 		if(!file.exists()) {
 			return null;
 		}

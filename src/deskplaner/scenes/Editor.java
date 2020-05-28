@@ -2,30 +2,27 @@ package deskplaner.scenes;
 
 import java.io.File;
 import deskplaner.gui.Navigation;
+import deskplaner.gui.NodeBuilder;
 import deskplaner.main.DeskPlaner;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.BorderPane;
-import javafx.stage.FileChooser;
 
 public class Editor extends Scene {
-	
-	private static TextArea textarea = new TextArea();
 	
 	private static BorderPane borderpane = new BorderPane();
 	private static ToolBar toolbar = new ToolBar();
 	private static Navigation navigation = new Navigation();
 	private static TabPane tabpane = new TabPane();
 	
+	private static TextArea textarea = new TextArea();
+	
 	public Editor() {
-		super(borderpane);
+		super(borderpane);		
 		borderpane.setTop(toolbar);
 		borderpane.setLeft(navigation);
 		borderpane.setCenter(tabpane);
@@ -34,34 +31,28 @@ public class Editor extends Scene {
 	}
 
 	private void initializeToolBar() {
-		addButton("New", event -> {
+		NodeBuilder.createButton("New", event -> {
 			addTab("unnamed.txt", "");
 		});
-		addButton("Open", event -> {
-			FileChooser fileChooser = new FileChooser();
-			fileChooser.setTitle("Open");
-			File file = fileChooser.showOpenDialog(DeskPlaner.getStage());
+		NodeBuilder.createButton("Open", event -> {
+			File file = NodeBuilder.createFileChooser("Open", "").showSaveDialog(DeskPlaner.getStage());
 			if(file != null) addTab(file);
 		});
-		addButton("Refresh", event -> {
+		NodeBuilder.createButton("Refresh", event -> {
 			if(!tabpane.getSelectionModel().isEmpty()) {
 				File file = new File(DeskPlaner.getDirectory("\\home").toString() + "\\" + tabpane.getSelectionModel().getSelectedItem().getText());
 				textarea.setText(DeskPlaner.loadStringFromFile(file));
 			}
 		});
-		addButton("Save", event -> {
+		NodeBuilder.createButton("Save", event -> {
 			if(!tabpane.getSelectionModel().isEmpty()) {
 				File file = new File(DeskPlaner.getDirectory("\\home").toString() + "\\" + tabpane.getSelectionModel().getSelectedItem().getText());
 				DeskPlaner.saveStringToFile(file, textarea.getText());
 			}
 		});
-		addButton("Save As", event -> {
+		NodeBuilder.createButton("Save As", event -> {
 			if(!tabpane.getSelectionModel().isEmpty()) {
-				FileChooser fileChooser = new FileChooser();
-				fileChooser.setTitle("Save As");
-				fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt"));
-				fileChooser.setInitialFileName(tabpane.getSelectionModel().getSelectedItem().getText());
-				File file = fileChooser.showSaveDialog(DeskPlaner.getStage());
+				File file = NodeBuilder.createFileChooser("Save As", tabpane.getSelectionModel().getSelectedItem().getText()).showSaveDialog(DeskPlaner.getStage());
 				if(file != null) DeskPlaner.saveStringToFile(file, textarea.getText());
 			}
 		});
@@ -71,18 +62,20 @@ public class Editor extends Scene {
 	private void initializeNavigation() {
 		File files[] = DeskPlaner.getFiles(DeskPlaner.getDirectory("\\home"));
 		for (int i = 0; i < files.length; i++) {
-			File file = files[i];
-			navigation.addButton(file.getName(), event -> {
-				boolean tabexist = false;
-				for (Tab tab : tabpane.getTabs()) {
-					if(tab.getText().equals(file.getName())) {
-						tabpane.getSelectionModel().select(tab);
-						textarea.setText(DeskPlaner.loadStringFromFile(file));
-						tabexist = true;
+			if(!files[i].isDirectory()) {
+				File file = files[i];
+				navigation.addButton(file.getName(), event -> {
+					boolean tabexist = false;
+					for (Tab tab : tabpane.getTabs()) {
+						if(tab.getText().equals(file.getName())) {
+							tabpane.getSelectionModel().select(tab);
+							textarea.setText(DeskPlaner.loadStringFromFile(file));
+							tabexist = true;
+						}
 					}
-				}
-				if(!tabexist) addTab(file);
-			});
+					if(!tabexist) addTab(file);
+				});
+			}
 		}
 	}
 	
@@ -106,12 +99,6 @@ public class Editor extends Scene {
 		tab.setOnSelectionChanged(event -> {Editor.textarea = textarea;});
 		tabpane.getTabs().add(tab);
 		tabpane.getSelectionModel().select(tab);
-	}
-	
-	private static void addButton(String string, EventHandler<ActionEvent> event) {
-		Button button = new Button(string);
-		button.setOnAction(event);
-		toolbar.getItems().add(button);
 	}
 
 }
