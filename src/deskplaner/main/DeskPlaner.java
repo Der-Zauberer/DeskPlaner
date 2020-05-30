@@ -1,15 +1,10 @@
 package deskplaner.main;
 
 import java.awt.Desktop;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Scanner;
@@ -193,37 +188,7 @@ public class DeskPlaner extends Application {
 	public static File[] getFiles(File directory, String ending) {
 		return directory.listFiles((dir, name) -> name.toLowerCase().endsWith(ending));
 	}
-	
-	public static void saveStringToFile(File file, String string) {
-		try {
-			BufferedWriter writer = Files.newBufferedWriter(Paths.get(file.getParent(), file.getName()), Charset.forName("UTF-8"));
-			String lines[] = string.split("\n");
-			for (int i = 0; i < lines.length - 1; i++) {
-				writer.write(lines[i]);
-				writer.newLine();
-			}
-			writer.write(lines[lines.length - 1]);
-			writer.close();
-		} catch (IOException exception) {
-			exception.printStackTrace();
-		}
-	}
-	
-	public static String loadStringFromFile(File file) {
-		String string = "";
-		try {
-			BufferedReader reader = Files.newBufferedReader(Paths.get(file.getParent(), file.getName()), Charset.forName("UTF-8"));
-			String line;
-			while((line = reader.readLine()) != null){
-				string += line + "\n";
-			}
-			reader.close();
-		} catch (IOException exception) {
-			exception.printStackTrace();
-		}
-		return string;
-	}
-	
+		
 	public static Stage getStage() {
 		return stage;
 	}
