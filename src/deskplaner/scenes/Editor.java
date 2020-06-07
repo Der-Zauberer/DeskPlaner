@@ -56,6 +56,10 @@ public class Editor extends Scene {
 				File file = files.get(tabpane.getSelectionModel().getSelectedIndex());
 				new FileAssistent(file).saveString(textarea.getText());
 			}
+			if(!tabpane.getSelectionModel().isEmpty()) {
+				File file = files.get(tabpane.getSelectionModel().getSelectedIndex());
+				textarea.setText(new FileAssistent(file).readString());
+			}
 		});
 		addButton("Save As", event -> {
 			if(!tabpane.getSelectionModel().isEmpty()) {

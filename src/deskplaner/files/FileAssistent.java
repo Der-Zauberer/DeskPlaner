@@ -14,10 +14,17 @@ public class FileAssistent {
 	
 	public FileAssistent(File file) {
 		this.file = file;
+		if(!file.exists()) {
+			try {
+				file.createNewFile();
+			} catch (IOException exception) {
+				exception.printStackTrace();
+			}
+		}
 	}
 	
 	public String readString() {
-		String string = "";
+		String string = null;
 		try {
 			BufferedReader reader = Files.newBufferedReader(Paths.get(file.toString()), Charset.forName("UTF-8"));
 			String line;
@@ -32,6 +39,9 @@ public class FileAssistent {
 	}
 	
 	public String[] readLines() {
+		if(readString() == null) {
+			return null;
+		}
 		return readString().split("\n");
 	}
 	

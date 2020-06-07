@@ -14,7 +14,8 @@ import deskplaner.commands.LSCommand;
 import deskplaner.commands.MkDirCommand;
 import deskplaner.commands.RMCommand;
 import deskplaner.commands.VersionCommand;
-import deskplaner.scenes.Editor;
+import deskplaner.files.YMLFile;
+import deskplaner.scenes.Dashboard;
 import deskplaner.util.ColorsANSI;
 import deskplaner.util.Command;
 import deskplaner.util.Notification;
@@ -29,17 +30,13 @@ public class DeskPlaner extends Application {
 	private static final boolean BETA = true;
 	private static final String[] AUTHORS = {"Der_Zauberer"};
 	
-	private static boolean colorproperty = true;
-	private static boolean guiproperty = true;
-	
 	private static Stage stage;
 	private static File currentdirectory;
 	private static HashMap<String, Command> commands = new HashMap<>();
 	
+	private static YMLFile settings;
+	
 	public static void main(String[] args) {
-		if(System.getProperty("os.name").toLowerCase().contains("windows")) {
-			colorproperty = false;
-		}
 		registerCommand("browser", new BrowserCommand());
 		registerCommand("cd", new CDCommand());
 		registerCommand("ls", new LSCommand());
@@ -48,15 +45,21 @@ public class DeskPlaner extends Application {
 		registerCommand("version", new VersionCommand());
 		currentdirectory = inititalizeDirectory("home");
 		inititalizeDirectory("tools");
+		inititalizeDirectory("system");
+		settings = new YMLFile(new File(getDeskPlanerDirectory() + "\\system\\settings.yml"));
+		if(System.getProperty("os.name").toLowerCase().contains("windows")) {
+			settings.set("consolecolors", "false");
+			settings.save();
+		}
 		console();
-		if(guiproperty)	launch();
+		launch();
 	}
 	
 	@Override
 	public void start(Stage stage) throws Exception {
 		stage = new Stage();
 		DeskPlaner.stage = stage;
-		stage.setScene(new Editor());
+		stage.setScene(new Dashboard());
 		stage.setTitle(getName());
 		stage.setHeight(720);
 		stage.setWidth(1020);
@@ -68,7 +71,7 @@ public class DeskPlaner extends Application {
 		new Thread(() -> {
 			String prefix = "";
 			String suffix = "";
-			if(colorproperty) {
+			if(settings.getString("consolecolors").equals("true")) {
 				prefix = ColorsANSI.YELLOW;
 				suffix = ColorsANSI.RESET;
 			}
@@ -92,7 +95,7 @@ public class DeskPlaner extends Application {
 	}
 	
 	public static void sendConsoleOutput(Object object, int importance) {
-		if(colorproperty == true) {
+		if(settings.getString("consolecolors").equals("true")) {
 			String color = null;
 			switch (importance) {
 			case Notification.INFO:	color = ColorsANSI.CYAN; break;
