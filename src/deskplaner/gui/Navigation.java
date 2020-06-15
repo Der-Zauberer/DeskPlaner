@@ -24,22 +24,21 @@ public class Navigation extends VBox {
 	
 	public void setTitle(String title) {
 		if(title != null && !title.isEmpty()) {
-			for(Node node : this.getChildren()) {
-				if(node instanceof Label && node.getStyleClass().contains("title")) {
-					if(title != null && !title.isEmpty()) {
-						((Label)node).setText(title);
-					} else {
-						this.getChildren().remove(node);
-					}
-					return;
-				}
+			if(this.getChildren().get(0) != null && this.getChildren().get(0).getStyleClass().contains("title")) {
+				((Label) this.getChildren().get(0)).setText(title);
 			}
-			if(title != null && !title.isEmpty()) this.getChildren().add(NodeBuilder.createLabel(title, "title"));
+		} else {
+			if(this.getChildren().get(0) != null && this.getChildren().get(0).getStyleClass().contains("title")) {
+				this.getChildren().remove(0);
+			}
 		}
 	}
 	
 	public void addButton(String name, EventHandler<ActionEvent> event) {
-		this.getChildren().add(NodeBuilder.createButton(name, event));
+		Button button = NodeBuilder.createButton(name, event);
+		button.setMinHeight(40);
+		button.setMinWidth(210);
+		this.getChildren().add(button);
 	}
 	
 	public Button getButton(String name) {

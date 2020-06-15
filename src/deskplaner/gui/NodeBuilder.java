@@ -21,16 +21,12 @@ public class NodeBuilder {
 	public static Button createButton(String name, EventHandler<ActionEvent> event) {
 		Button button = new Button(name);
 		button.setOnAction(event);
-		button.setMinHeight(40);
-		button.setMinWidth(210);
 		return button;
 	}
 	
 	public static Button createButton(String name, EventHandler<ActionEvent> event, String styleclass) {
 		Button button = new Button(name);
 		button.setOnAction(event);
-		button.setMinHeight(40);
-		button.setMinWidth(210);
 		button.getStyleClass().add(styleclass);
 		return button;
 	}

@@ -13,7 +13,6 @@ public class YMLFile {
 		String lines[] = new FileAssistent(file).readLines();
 		if(lines != null) {
 			for (int i = 0; i < lines.length; i++) {
-				System.out.println(lines.length);
 				entries.put(lines[i].split(": ")[0], lines[i].split(": ")[1]);
 			}
 		}

@@ -1,6 +1,5 @@
 package deskplaner.scenes;
 
-import deskplaner.gui.Navigation;
 import deskplaner.gui.NodeBuilder;
 import deskplaner.main.DeskPlaner;
 import javafx.geometry.Insets;
@@ -12,12 +11,10 @@ public class Dashboard extends Scene {
 
 	private static BorderPane borderpane = new BorderPane();
 	private static VBox vbox = new VBox();
-	private static Navigation navigation = new Navigation("DeskPlaner");
 	
 	public Dashboard() {
 		super(borderpane);
-		navigation.addButton("Dashboard", event -> {});
-		borderpane.setLeft(navigation);
+		borderpane.setLeft(DeskPlaner.getNavigation());
 		borderpane.setCenter(vbox);
 		vbox.setPadding(new Insets(40));
 		vbox.getChildren().add(NodeBuilder.createButton("Editor", event -> DeskPlaner.setScene(new Editor())));

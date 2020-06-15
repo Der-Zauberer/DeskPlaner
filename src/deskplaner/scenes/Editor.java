@@ -6,10 +6,7 @@ import deskplaner.files.FileAssistent;
 import deskplaner.gui.Navigation;
 import deskplaner.gui.NodeBuilder;
 import deskplaner.main.DeskPlaner;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
@@ -37,21 +34,21 @@ public class Editor extends Scene {
 	}
 
 	private void initializeToolBar() {
-		addButton("New", event -> {
+		toolbar.getItems().add(NodeBuilder.createButton("New", event -> {
 			addTab("unnamed.txt", "");
-		});
-		addButton("Open", event -> {
+		}));
+		toolbar.getItems().add(NodeBuilder.createButton("Open", event -> {
 			File file = NodeBuilder.createFileChooser("Open", "").showSaveDialog(DeskPlaner.getStage());
 			if(file != null) addTab(file);
-		});
-		addButton("Refresh", event -> {
+		}));
+		toolbar.getItems().add(NodeBuilder.createButton("Refresh", event -> {
 			if(!tabpane.getSelectionModel().isEmpty()) {
 				File file = files.get(tabpane.getSelectionModel().getSelectedIndex());
 				textarea.setText(new FileAssistent(file).readString());
 			}
 			refreshNavigation();
-		});
-		addButton("Save", event -> {
+		}));
+		toolbar.getItems().add(NodeBuilder.createButton("Save", event -> {
 			if(!tabpane.getSelectionModel().isEmpty()) {
 				File file = files.get(tabpane.getSelectionModel().getSelectedIndex());
 				new FileAssistent(file).saveString(textarea.getText());
@@ -60,13 +57,13 @@ public class Editor extends Scene {
 				File file = files.get(tabpane.getSelectionModel().getSelectedIndex());
 				textarea.setText(new FileAssistent(file).readString());
 			}
-		});
-		addButton("Save As", event -> {
+		}));
+		toolbar.getItems().add(NodeBuilder.createButton("Save As", event -> {
 			if(!tabpane.getSelectionModel().isEmpty()) {
 				File file = NodeBuilder.createFileChooser("Save As", tabpane.getSelectionModel().getSelectedItem().getText()).showSaveDialog(DeskPlaner.getStage());
 				if(file != null) new FileAssistent(file).saveString(textarea.getText());
 			}
-		});
+		}));
 		
 	}
 	
@@ -117,12 +114,6 @@ public class Editor extends Scene {
 			files.remove(tabpane.getTabs().indexOf(tab));
 		});
 		return tab;
-	}
-	
-	private static void addButton(String string, EventHandler<ActionEvent> event) {
-		Button button = new Button(string);
-		button.setOnAction(event);
-		toolbar.getItems().add(button);
 	}
 
 }

@@ -15,6 +15,7 @@ import deskplaner.commands.MkDirCommand;
 import deskplaner.commands.RMCommand;
 import deskplaner.commands.VersionCommand;
 import deskplaner.files.YMLFile;
+import deskplaner.gui.Navigation;
 import deskplaner.scenes.Dashboard;
 import deskplaner.util.ColorsANSI;
 import deskplaner.util.Command;
@@ -32,20 +33,15 @@ public class DeskPlaner extends Application {
 	
 	private static Stage stage;
 	private static File currentdirectory;
+	private static Navigation navigation = new Navigation("DeskPalner");
 	private static HashMap<String, Command> commands = new HashMap<>();
+	private static HashMap<String, Scene> scenes = new HashMap<>();
 	
 	private static YMLFile settings;
 	
 	public static void main(String[] args) {
-		registerCommand("browser", new BrowserCommand());
-		registerCommand("cd", new CDCommand());
-		registerCommand("ls", new LSCommand());
-		registerCommand("mkdir", new MkDirCommand());
-		registerCommand("rm", new RMCommand());
-		registerCommand("version", new VersionCommand());
-		currentdirectory = inititalizeDirectory("home");
-		inititalizeDirectory("tools");
-		inititalizeDirectory("system");
+		initializeDirectories();
+		registerCommands();
 		settings = new YMLFile(new File(getDeskPlanerDirectory() + "\\system\\settings.yml"));
 		if(System.getProperty("os.name").toLowerCase().contains("windows")) {
 			settings.set("consolecolors", "false");
@@ -57,9 +53,11 @@ public class DeskPlaner extends Application {
 	
 	@Override
 	public void start(Stage stage) throws Exception {
+		registerScenes();
+		initializeNavigation();
 		stage = new Stage();
 		DeskPlaner.stage = stage;
-		stage.setScene(new Dashboard());
+		stage.setScene(scenes.get("Dashboard"));
 		stage.setTitle(getName());
 		stage.setHeight(720);
 		stage.setWidth(1020);
@@ -90,6 +88,31 @@ public class DeskPlaner extends Application {
 		}).start();
 	}
 	
+	public static void initializeDirectories() {
+		currentdirectory = inititalizeDirectory("home");
+		inititalizeDirectory("tools");
+		inititalizeDirectory("system");
+	}
+	
+	private static void registerCommands() {
+		registerCommand("browser", new BrowserCommand());
+		registerCommand("cd", new CDCommand());
+		registerCommand("ls", new LSCommand());
+		registerCommand("mkdir", new MkDirCommand());
+		registerCommand("rm", new RMCommand());
+		registerCommand("version", new VersionCommand());
+	}
+	
+	private static void registerScenes() {
+		registerScene("Dashboard", new Dashboard());
+	}
+	
+	private static void initializeNavigation() {
+		for(String scene : DeskPlaner.getScenes().keySet()) {
+			navigation.addButton(scene, event -> DeskPlaner.setScene(DeskPlaner.getScenes().get(scene)));
+		}
+	}
+	
 	public static void sendConsoleOutput(Object object) {
 		System.out.println(object);
 	}
@@ -115,6 +138,10 @@ public class DeskPlaner extends Application {
 		commands.put(label, command);
 	}
 	
+	public static void registerScene(String label, Scene scene) {
+		scenes.put(label, scene);
+	}
+	
 	public static boolean executeCommand(String label, String args[]) {
 		if(commands.containsKey(label)) {
 			if(args.length > 0 && args[0].equalsIgnoreCase("help")) {
@@ -128,6 +155,10 @@ public class DeskPlaner extends Application {
 	
 	public static HashMap<String, Command> getCommands() {
 		return commands;
+	}
+	
+	public static HashMap<String, Scene> getScenes() {
+		return scenes;
 	}
 	
 	public static void setCurrentDirectory(File directory) {
@@ -202,6 +233,10 @@ public class DeskPlaner extends Application {
 	
 	public static Scene getScene() {
 		return stage.getScene();
+	}
+	
+	public static Navigation getNavigation() {
+		return navigation;
 	}
 	
 	public static String getName() {
