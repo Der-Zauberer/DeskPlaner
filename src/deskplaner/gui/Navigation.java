@@ -15,6 +15,8 @@ public class Navigation extends VBox {
 	}
 
 	public Navigation(String title) {
+		this.getStyleClass().add("navigation");
+		this.getStyleClass().add("liblue");
 		this.setMinWidth(250);
 		this.setMinHeight(200);
 		this.setPadding(new Insets(20));

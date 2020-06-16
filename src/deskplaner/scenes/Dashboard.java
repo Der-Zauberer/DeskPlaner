@@ -2,6 +2,7 @@ package deskplaner.scenes;
 
 import deskplaner.gui.NodeBuilder;
 import deskplaner.main.DeskPlaner;
+import deskplaner.resources.Resource;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
@@ -18,6 +19,7 @@ public class Dashboard extends Scene {
 		borderpane.setCenter(vbox);
 		vbox.setPadding(new Insets(40));
 		vbox.getChildren().add(NodeBuilder.createButton("Editor", event -> DeskPlaner.setScene(new Editor())));
+		this.getStylesheets().add(Resource.getStyleSheet("style.css"));
 	}
 	
 }
