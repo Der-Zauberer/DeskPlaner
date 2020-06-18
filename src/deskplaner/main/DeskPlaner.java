@@ -15,11 +15,10 @@ import deskplaner.commands.MkDirCommand;
 import deskplaner.commands.RMCommand;
 import deskplaner.commands.VersionCommand;
 import deskplaner.files.YMLFile;
-import deskplaner.gui.Navigation;
+import deskplaner.gui.DeskNavigation;
 import deskplaner.scenes.Dashboard;
-import deskplaner.util.ColorsANSI;
+import deskplaner.scenes.Notes;
 import deskplaner.util.Command;
-import deskplaner.util.Notification;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -33,7 +32,6 @@ public class DeskPlaner extends Application {
 	
 	private static Stage stage;
 	private static File currentdirectory;
-	private static Navigation navigation = new Navigation("DeskPalner");
 	private static HashMap<String, Command> commands = new HashMap<>();
 	private static HashMap<String, Scene> scenes = new HashMap<>();
 	
@@ -54,13 +52,13 @@ public class DeskPlaner extends Application {
 	@Override
 	public void start(Stage stage) throws Exception {
 		registerScenes();
-		initializeNavigation();
 		stage = new Stage();
 		DeskPlaner.stage = stage;
 		stage.setScene(scenes.get("Dashboard"));
 		stage.setTitle(getName());
 		stage.setHeight(720);
 		stage.setWidth(1020);
+		stage.setOnCloseRequest(event -> System.exit(0));
 		stage.show();
 	}
 	
@@ -69,10 +67,6 @@ public class DeskPlaner extends Application {
 		new Thread(() -> {
 			String prefix = "";
 			String suffix = "";
-			if(settings.getString("consolecolors").equals("true")) {
-				prefix = ColorsANSI.YELLOW;
-				suffix = ColorsANSI.RESET;
-			}
 			Scanner scanner = new Scanner(System.in);
 			while (true) {
 				String location = getCurrentDirectory().toString();
@@ -105,33 +99,12 @@ public class DeskPlaner extends Application {
 	
 	private static void registerScenes() {
 		registerScene("Dashboard", new Dashboard());
-	}
-	
-	private static void initializeNavigation() {
-		for(String scene : DeskPlaner.getScenes().keySet()) {
-			navigation.addButton(scene, event -> DeskPlaner.setScene(DeskPlaner.getScenes().get(scene)));
-		}
+		registerScene("Notes", new Notes());
+		DeskNavigation.updateNavigation();
 	}
 	
 	public static void sendConsoleOutput(Object object) {
 		System.out.println(object);
-	}
-	
-	public static void sendConsoleOutput(Object object, int importance) {
-		if(settings.getString("consolecolors").equals("true")) {
-			String color = null;
-			switch (importance) {
-			case Notification.INFO:	color = ColorsANSI.CYAN; break;
-			case Notification.SUCCESS: color = ColorsANSI.GREEN; break;
-			case Notification.WARNING: color = ColorsANSI.YELLOW; break;
-			case Notification.ERROR: color = ColorsANSI.RED; break;
-			default: color = ColorsANSI.RESET; break;
-			}
-			sendConsoleOutput(color + object.toString() + ColorsANSI.RESET);
-		} else {
-			sendConsoleOutput(object);
-		}
-		
 	}
 	
 	public static void registerCommand(String label, Command command) {
@@ -233,10 +206,6 @@ public class DeskPlaner extends Application {
 	
 	public static Scene getScene() {
 		return stage.getScene();
-	}
-	
-	public static Navigation getNavigation() {
-		return navigation;
 	}
 	
 	public static String getName() {

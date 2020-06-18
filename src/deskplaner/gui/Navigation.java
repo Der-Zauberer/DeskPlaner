@@ -10,37 +10,43 @@ import javafx.scene.layout.VBox;
 
 public class Navigation extends VBox {
 	
+	private Label title;
+	
 	public Navigation() {
 		this(null);
 	}
 
 	public Navigation(String title) {
-		this.getStyleClass().add("navigation");
-		this.getStyleClass().add("liblue");
 		this.setMinWidth(250);
 		this.setMinHeight(200);
 		this.setPadding(new Insets(20));
-		this.getStyleClass().add("navigation");
-		if(title != null && !title.isEmpty()) this.getChildren().add(NodeBuilder.createLabel(title, "title"));
+		setTitle(title);
 	}
 	
 	public void setTitle(String title) {
-		if(title != null && !title.isEmpty()) {
-			if(this.getChildren().get(0) != null && this.getChildren().get(0).getStyleClass().contains("title")) {
-				((Label) this.getChildren().get(0)).setText(title);
+		if(title != null) {
+			if(this.title == null) {
+				this.title = new Label(title);
+				this.title.getStyleClass().add("title");
+				this.title.setPadding(new Insets(20, 0, 40, 10));
+				this.getChildren().add(this.title);
+			} else {
+				this.title.setText(title);
 			}
 		} else {
-			if(this.getChildren().get(0) != null && this.getChildren().get(0).getStyleClass().contains("title")) {
-				this.getChildren().remove(0);
+			if(this.title != null) {
+				this.getChildren().remove(this.title);
+				this.title = null;
 			}
 		}
 	}
 	
-	public void addButton(String name, EventHandler<ActionEvent> event) {
+	public Button addButton(String name, EventHandler<ActionEvent> event) {
 		Button button = NodeBuilder.createButton(name, event);
 		button.setMinHeight(40);
 		button.setMinWidth(210);
 		this.getChildren().add(button);
+		return button;
 	}
 	
 	public Button getButton(String name) {

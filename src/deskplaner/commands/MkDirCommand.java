@@ -1,10 +1,8 @@
 package deskplaner.commands;
 
 import java.io.File;
-
 import deskplaner.main.DeskPlaner;
 import deskplaner.util.Command;
-import deskplaner.util.Notification;
 
 public class MkDirCommand implements Command {
 
@@ -16,9 +14,9 @@ public class MkDirCommand implements Command {
 		if(args.length == 1) {
 			boolean success = new File(directory + "\\" + args[0]).mkdir();
 			if(!success) {
-				DeskPlaner.sendConsoleOutput("Could not create directory!", Notification.ERROR);
+				DeskPlaner.sendConsoleOutput("Could not create directory!");
 			} else {
-				DeskPlaner.sendConsoleOutput("The directory " + args[0] + " was created!", Notification.SUCCESS);
+				DeskPlaner.sendConsoleOutput("The directory " + args[0] + " was created!");
 				return true;
 			}
 		}

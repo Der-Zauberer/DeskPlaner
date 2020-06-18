@@ -8,7 +8,6 @@ import java.nio.file.Paths;
 import java.util.Comparator;
 import deskplaner.main.DeskPlaner;
 import deskplaner.util.Command;
-import deskplaner.util.Notification;
 
 public class RMCommand implements Command {
 
@@ -19,14 +18,14 @@ public class RMCommand implements Command {
 		}
 		if(args.length == 1) {
 			if(!Files.exists(Paths.get(directory.toString(), args[0]))) {
-				DeskPlaner.sendConsoleOutput("Could not remove file or directory!", Notification.ERROR);
+				DeskPlaner.sendConsoleOutput("Could not remove file or directory!");
 			}
 			try {
 				Files.walk(Paths.get(directory.getPath(), args[0])).sorted(Comparator.reverseOrder()).map(Path::toFile).forEach(File::delete);
-				DeskPlaner.sendConsoleOutput("The file or directory " + args[0] + " was removed!", Notification.SUCCESS);
+				DeskPlaner.sendConsoleOutput("The file or directory " + args[0] + " was removed!");
 				return true;
 			} catch (IOException exception) {
-				DeskPlaner.sendConsoleOutput("Could not remove file or directory!", Notification.ERROR);
+				DeskPlaner.sendConsoleOutput("Could not remove file or directory!");
 			}
 		}
 		return false;
