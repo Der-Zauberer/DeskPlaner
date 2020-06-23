@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Scanner;
@@ -16,9 +17,10 @@ import deskplaner.commands.RMCommand;
 import deskplaner.commands.VersionCommand;
 import deskplaner.files.YMLFile;
 import deskplaner.gui.DeskNavigation;
-import deskplaner.scenes.Dashboard;
-import deskplaner.scenes.Notes;
+import deskplaner.tools.Dashboard;
+import deskplaner.tools.Notes;
 import deskplaner.util.Command;
+import deskplaner.util.Tool;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -33,7 +35,7 @@ public class DeskPlaner extends Application {
 	private static Stage stage;
 	private static File currentdirectory;
 	private static HashMap<String, Command> commands = new HashMap<>();
-	private static HashMap<String, Scene> scenes = new HashMap<>();
+	private static ArrayList<Tool> tools = new ArrayList<>();
 	
 	private static YMLFile settings;
 	
@@ -54,10 +56,10 @@ public class DeskPlaner extends Application {
 		registerScenes();
 		stage = new Stage();
 		DeskPlaner.stage = stage;
-		stage.setScene(scenes.get("Dashboard"));
+		stage.setScene(getTool("Dashboard").getScene());
 		stage.setTitle(getName());
 		stage.setHeight(720);
-		stage.setWidth(1020);
+		stage.setWidth(1280);
 		stage.setOnCloseRequest(event -> System.exit(0));
 		stage.show();
 	}
@@ -98,8 +100,8 @@ public class DeskPlaner extends Application {
 	}
 	
 	private static void registerScenes() {
-		registerScene("Dashboard", new Dashboard());
-		registerScene("Notes", new Notes());
+		registerTool(new Dashboard());
+		registerTool(new Notes());
 		DeskNavigation.updateNavigation();
 	}
 	
@@ -111,8 +113,8 @@ public class DeskPlaner extends Application {
 		commands.put(label, command);
 	}
 	
-	public static void registerScene(String label, Scene scene) {
-		scenes.put(label, scene);
+	public static void registerTool(Tool tool) {
+		tools.add(tool);
 	}
 	
 	public static boolean executeCommand(String label, String args[]) {
@@ -126,12 +128,21 @@ public class DeskPlaner extends Application {
 		return false;
 	}
 	
+	public static Tool getTool(String name) {
+		for (Tool tool : tools) {
+			if(tool.getName().equals(name)) {
+				return tool;
+			}
+		}
+		return null;
+	}
+	
 	public static HashMap<String, Command> getCommands() {
 		return commands;
 	}
 	
-	public static HashMap<String, Scene> getScenes() {
-		return scenes;
+	public static ArrayList<Tool> getTools() {
+		return tools;
 	}
 	
 	public static void setCurrentDirectory(File directory) {

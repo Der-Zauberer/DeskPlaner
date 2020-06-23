@@ -1,4 +1,4 @@
-package deskplaner.scenes;
+package deskplaner.tools;
 
 import java.io.File;
 import java.util.HashMap;

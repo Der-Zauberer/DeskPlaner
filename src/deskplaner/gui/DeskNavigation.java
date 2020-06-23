@@ -2,6 +2,7 @@ package deskplaner.gui;
 
 import java.util.ArrayList;
 import deskplaner.main.DeskPlaner;
+import deskplaner.util.Tool;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 
@@ -21,14 +22,14 @@ public class DeskNavigation extends Navigation {
 			for(Node node : desknavigation.getChildren()) {
 				if(node instanceof Button) desknavigation.getChildren().remove(node);
 			}
-			for (String string : DeskPlaner.getScenes().keySet()) {
-				desknavigation.addButton(string, event -> {
-					DeskPlaner.setScene(DeskPlaner.getScenes().get(string));
+			for (Tool tool : DeskPlaner.getTools()) {
+				desknavigation.addButton(tool.getName(), event -> {
+					DeskPlaner.setScene(DeskPlaner.getTool(tool.getName()).getScene());
 					if(!((Button)event.getSource()).getStyleClass().contains("active")) setActiveButton(((Button)event.getSource()).getText());
 				});
 				if(first) {
 					first = false;
-					setActiveButton(string);
+					setActiveButton(tool.getName());
 				}
 				
 			}
