@@ -24,7 +24,7 @@ public class FileAssistent {
 	}
 	
 	public String readString() {
-		String string = null;
+		String string = "";
 		try {
 			BufferedReader reader = Files.newBufferedReader(Paths.get(file.toString()), Charset.forName("UTF-8"));
 			String line;
@@ -39,9 +39,6 @@ public class FileAssistent {
 	}
 	
 	public String[] readLines() {
-		if(readString() == null) {
-			return null;
-		}
 		return readString().split("\n");
 	}
 	

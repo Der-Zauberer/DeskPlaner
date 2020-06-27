@@ -1,5 +1,7 @@
 package deskplaner.tools;
 
+import java.io.File;
+import deskplaner.files.FileAssistent;
 import deskplaner.gui.Card;
 import deskplaner.gui.DeskNavigation;
 import deskplaner.resources.Resource;
@@ -31,13 +33,19 @@ public class Notes extends Tool {
 		scrollpane.setContent(flowpane);
 		scrollpane.setHbarPolicy(ScrollBarPolicy.NEVER);
 		scrollpane.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
+		scrollpane.getStyleClass().add("root");
 		flowpane.prefWidthProperty().bind(scrollpane.widthProperty());
+		flowpane.getStyleClass().add("root");
 		
 		flowpane.setPadding(new Insets(40));
 		flowpane.setHgap(20);
 		flowpane.setVgap(20);
-		for (int i = 0; i < 50; i++) {
-			flowpane.getChildren().add(new Card("Test"));
+		
+		for(File file : this.getFiles()) {
+			String name = file.getName().substring(0, file.getName().length() - 4);
+			String content = new FileAssistent(file).readString();
+			Card card = new Card(name, content);
+			flowpane.getChildren().add(card);
 		}
 	}
 

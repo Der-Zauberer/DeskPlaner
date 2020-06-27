@@ -13,7 +13,7 @@ public abstract class Tool {
 	
 	public Tool(String name) {
 		this.name = name;
-		directory = new File(DeskPlaner.getDeskPlanerDirectory().toString() + "\\Tools\\" + name);
+		directory = new File(DeskPlaner.getDeskPlanerDirectory().toString() + "\\tools\\" + name);
 		if(!directory.exists()) directory.mkdirs();
 	}
 	
@@ -32,6 +32,14 @@ public abstract class Tool {
 	
 	public File getToolDirectory() {
 		return directory;
+	}
+	
+	public File[] getFiles() {
+		return directory.listFiles();
+	}
+	
+	public File[] getFiles(String ending) {
+		return directory.listFiles((dir, name) -> name.toLowerCase().endsWith(ending));
 	}
 	
 	public Scene getScene() {

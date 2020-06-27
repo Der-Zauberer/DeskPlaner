@@ -1,6 +1,7 @@
 .root{
 	-fx-background-color: white;
 	-fx-font-family: Arial;
+	-fx-border-width: 0px;
 }
 
 .white{-fx-background-color: white !important; -fx-text-fill: black !important;}
@@ -41,6 +42,35 @@
 
 .navigation .active{
 	-fx-background-color: #00000033;
+}
+
+.scroll-bar:horizontal , .scroll-bar:vertical{
+    -fx-background-color:transparent;
+}
+
+.increment-button , .decrement-button {
+    -fx-background-color:transparent;
+}
+
+.scroll-bar:horizontal .track , .scroll-bar:vertical .track{
+     -fx-background-color: transparent;
+     -fx-max-width: 2px;
+}
+
+.scroll-bar:horizontal .thumb,
+.scroll-bar:vertical .thumb {
+ 	-fx-background-color: #cccccc;
+ 
+}
+
+.scroll-bar:horizontal:hover .track ,
+.scroll-bar:horizontal:pressed .track ,
+.scroll-bar:horizontal:focused .track ,
+.scroll-bar:vertical:hover .track ,
+.scroll-bar:vertical:pressed .track ,
+.scroll-bar:vertical:focused .track{
+     -fx-background-color: transparent;
+ 
 }
 
 .card{

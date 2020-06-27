@@ -198,14 +198,6 @@ public class DeskPlaner extends Application {
 		}
 		return file;
 	}
-	
-	public static File[] getFiles(File directory) {
-		return directory.listFiles();
-	}
-	
-	public static File[] getFiles(File directory, String ending) {
-		return directory.listFiles((dir, name) -> name.toLowerCase().endsWith(ending));
-	}
 		
 	public static Stage getStage() {
 		return stage;

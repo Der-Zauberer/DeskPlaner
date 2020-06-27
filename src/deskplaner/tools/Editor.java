@@ -69,7 +69,7 @@ public class Editor extends Scene {
 	
 	private void refreshNavigation() {
 		navigation.getChildren().clear();
-		File files[] = DeskPlaner.getFiles(DeskPlaner.getDirectory("\\home"));
+		File files[] = DeskPlaner.getDirectory("\\home").listFiles();
 		for (int i = 0; i < files.length; i++) {
 			if(!files[i].isDirectory()) {
 				File file = files[i];
