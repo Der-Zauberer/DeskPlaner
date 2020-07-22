@@ -14,8 +14,8 @@ import deskplaner.commands.CDCommand;
 import deskplaner.commands.LSCommand;
 import deskplaner.commands.MkDirCommand;
 import deskplaner.commands.RMCommand;
+import deskplaner.commands.VariableCommand;
 import deskplaner.commands.VersionCommand;
-import deskplaner.files.YMLFile;
 import deskplaner.gui.DeskNavigation;
 import deskplaner.tools.Dashboard;
 import deskplaner.tools.Notes;
@@ -36,17 +36,11 @@ public class DeskPlaner extends Application {
 	private static File currentdirectory;
 	private static HashMap<String, Command> commands = new HashMap<>();
 	private static ArrayList<Tool> tools = new ArrayList<>();
-	
-	private static YMLFile settings;
+	private static HashMap<String, String> variable = new HashMap<>();
 	
 	public static void main(String[] args) {
 		initializeDirectories();
 		registerCommands();
-		settings = new YMLFile(new File(getDeskPlanerDirectory() + "\\system\\settings.yml"));
-		if(System.getProperty("os.name").toLowerCase().contains("windows")) {
-			settings.set("consolecolors", "false");
-			settings.save();
-		}
 		console();
 		launch();
 	}
@@ -96,6 +90,7 @@ public class DeskPlaner extends Application {
 		registerCommand("ls", new LSCommand());
 		registerCommand("mkdir", new MkDirCommand());
 		registerCommand("rm", new RMCommand());
+		registerCommand("variable", new VariableCommand());
 		registerCommand("version", new VersionCommand());
 	}
 	
@@ -113,10 +108,6 @@ public class DeskPlaner extends Application {
 		commands.put(label, command);
 	}
 	
-	public static void registerTool(Tool tool) {
-		tools.add(tool);
-	}
-	
 	public static boolean executeCommand(String label, String args[]) {
 		if(commands.containsKey(label)) {
 			if(args.length > 0 && args[0].equalsIgnoreCase("help")) {
@@ -128,6 +119,14 @@ public class DeskPlaner extends Application {
 		return false;
 	}
 	
+	public static HashMap<String, Command> getCommands() {
+		return commands;
+	}
+	
+	public static void registerTool(Tool tool) {
+		tools.add(tool);
+	}
+	
 	public static Tool getTool(String name) {
 		for (Tool tool : tools) {
 			if(tool.getName().equals(name)) {
@@ -137,12 +136,32 @@ public class DeskPlaner extends Application {
 		return null;
 	}
 	
-	public static HashMap<String, Command> getCommands() {
-		return commands;
-	}
-	
 	public static ArrayList<Tool> getTools() {
 		return tools;
+	}
+	
+	public static void addVariable(String name, String value) {
+		if(!variable.containsKey(name)) {
+			variable.put(name, value);
+		}
+	}
+	
+	public static void removeVariable(String name) {
+		if(variable.containsKey(name)) {
+			variable.remove(name);
+		}
+	}
+	
+	public static String getVariable(String name) {
+		return variable.get(name);
+	}
+	
+	public static boolean hasVariable(String name) {
+		return variable.containsKey(name);
+	}
+	
+	public static HashMap<String, String> getVariables() {
+		return variable;
 	}
 	
 	public static void setCurrentDirectory(File directory) {
