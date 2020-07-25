@@ -2,6 +2,8 @@ package deskplaner.files;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 public class YMLFile {
 	
@@ -11,19 +13,43 @@ public class YMLFile {
 	public YMLFile(File file) {
 		this.file = file;
 		String lines[] = new FileAssistent(file).readLines();
-		if(lines != null) {
+		if(lines != null && lines.length > 0) {
 			for (int i = 0; i < lines.length; i++) {
-				entries.put(lines[i].split(": ")[0], lines[i].split(": ")[1]);
+				String key = lines[i].split(": ", 2)[0];
+				String value = lines[i].split(": ", 2)[1];
+				entries.put(key, value);
 			}
 		}
 	}
 	
 	public void set(String key, String value) {
-		entries.put(key, value);
+		if(value == null) {
+			entries.remove(key);
+		} else {
+			entries.put(key, value);
+		}
 	}
 	
 	public String getString(String key) {
-		return entries.get(key).toString();
+		try {
+			return entries.get(key).toString();
+		} catch (Exception exception) {
+			return null;
+		}
+	}
+	
+	public Set<String> getKeyList() {
+		return entries.keySet();
+	}
+	
+	public Set<String> getKeyList(String key) {
+		Set<String> keyset = new HashSet<String>(); 
+		for (String string : entries.keySet()) {
+			if(string.startsWith(key)) {
+				keyset.add(string);
+			}
+		}
+		return keyset;
 	}
 	
 	public void save() {

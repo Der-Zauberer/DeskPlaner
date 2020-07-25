@@ -18,14 +18,14 @@ public class VariableCommand implements Command {
 				DeskPlaner.addVariable(args[1], args[2]);
 				System.out.println("Added " + args[1] + " variable!");
 			} else {
-				System.out.println("The variable" + args[1] + " already exists!");
+				System.out.println("The variable " + args[1] + " already exists!");
 			}
 		} else if(args.length == 2 && args[0].equals("remove")) {
 			if(DeskPlaner.hasVariable(args[1])) {
 				DeskPlaner.removeVariable(args[1]);
-				System.out.println("The variable" + args[1] + " does not exist!");
+				System.out.println("Removed " + args[1] + " variable!");
 			} else {
-				
+				System.out.println("The variable " + args[1] + " does not exist!");
 			}
 		} else if(args.length == 1 && args[0].equals("list")) {
 			for(String string : DeskPlaner.getVariables().keySet()) {

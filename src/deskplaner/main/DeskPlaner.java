@@ -16,6 +16,7 @@ import deskplaner.commands.MkDirCommand;
 import deskplaner.commands.RMCommand;
 import deskplaner.commands.VariableCommand;
 import deskplaner.commands.VersionCommand;
+import deskplaner.files.YMLFile;
 import deskplaner.gui.DeskNavigation;
 import deskplaner.tools.Dashboard;
 import deskplaner.tools.Notes;
@@ -34,12 +35,14 @@ public class DeskPlaner extends Application {
 	
 	private static Stage stage;
 	private static File currentdirectory;
+	private static YMLFile settings;
 	private static HashMap<String, Command> commands = new HashMap<>();
 	private static ArrayList<Tool> tools = new ArrayList<>();
 	private static HashMap<String, String> variable = new HashMap<>();
 	
 	public static void main(String[] args) {
 		initializeDirectories();
+		loadSettings();
 		registerCommands();
 		console();
 		launch();
@@ -78,10 +81,20 @@ public class DeskPlaner extends Application {
 		}).start();
 	}
 	
-	public static void initializeDirectories() {
+	private static void initializeDirectories() {
 		currentdirectory = inititalizeDirectory("home");
 		inititalizeDirectory("tools");
 		inititalizeDirectory("system");
+	}
+	
+	private static void loadSettings() {
+		File file = new File(getDirectory("system").toString() + "\\settings.yml");
+		settings = new YMLFile(file);
+		for (String key : settings.getKeyList("variables")) {
+			String name = key.split("variables.")[1];
+			String value = settings.getString(key);
+			addVariable(name, value);
+		}
 	}
 	
 	private static void registerCommands() {
@@ -143,12 +156,20 @@ public class DeskPlaner extends Application {
 	public static void addVariable(String name, String value) {
 		if(!variable.containsKey(name)) {
 			variable.put(name, value);
+			if(settings.getString("variables." + name) == null) {
+				settings.set("variables." + name, value);
+				settings.save();
+			}
 		}
 	}
 	
 	public static void removeVariable(String name) {
 		if(variable.containsKey(name)) {
 			variable.remove(name);
+			if(settings.getString("variables." + name) != null) {
+				settings.set("variables." + name, null);
+				settings.save();
+			}
 		}
 	}
 	
@@ -172,14 +193,6 @@ public class DeskPlaner extends Application {
 		return currentdirectory;
 	}
 	
-	public static void openWebsiteInBrowser(String url) {
-		try {
-			Desktop.getDesktop().browse(new URL(url).toURI());
-		} catch (IOException | URISyntaxException exception) {
-			exception.printStackTrace();
-		}
-	}
-	
 	public static File inititalizeDirectory(String path) {
 		if(!path.startsWith("\\")) path = "\\" + path;
 		File file = new File(getDeskPlanerDirectory().toString() + path);
@@ -187,14 +200,6 @@ public class DeskPlaner extends Application {
 			file.mkdirs();
 		}
 		return file;
-	}
-	
-	public static void openFile(File file) {
-		try {
-			Desktop.getDesktop().open(file);
-		} catch (IOException exception) {
-			exception.printStackTrace();
-		}
 	}
 	
 	public static File getDeskPlanerDirectory() {
@@ -216,6 +221,22 @@ public class DeskPlaner extends Application {
 			return null;
 		}
 		return file;
+	}
+	
+	public static void openFile(File file) {
+		try {
+			Desktop.getDesktop().open(file);
+		} catch (IOException exception) {
+			exception.printStackTrace();
+		}
+	}
+	
+	public static void openWebsiteInBrowser(String url) {
+		try {
+			Desktop.getDesktop().browse(new URL(url).toURI());
+		} catch (IOException | URISyntaxException exception) {
+			exception.printStackTrace();
+		}
 	}
 		
 	public static Stage getStage() {
