@@ -13,7 +13,7 @@ public class YMLFile {
 	public YMLFile(File file) {
 		this.file = file;
 		String lines[] = new FileAssistent(file).readLines();
-		if(lines != null && lines.length > 0) {
+		if(lines != null && lines.length > 0 && !lines[0].equals("")) {
 			for (int i = 0; i < lines.length; i++) {
 				String key = lines[i].split(": ", 2)[0];
 				String value = lines[i].split(": ", 2)[1];

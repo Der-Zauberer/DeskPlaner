@@ -29,8 +29,7 @@ import javafx.stage.Stage;
 public class DeskPlaner extends Application {
 	
 	private static final String NAME = "DeskPlaner";
-	private static final int VERSION = 0;
-	private static final boolean BETA = true;
+	private static final String VERSION = "v0.1-beta";
 	private static final String[] AUTHORS = {"Der_Zauberer"};
 	
 	private static Stage stage;
@@ -255,12 +254,8 @@ public class DeskPlaner extends Application {
 		return NAME;
 	}
 	
-	public static int getVersion() {
+	public static String getVersion() {
 		return VERSION;
-	}
-	
-	public static boolean isBeta() {
-		return BETA;
 	}
 	
 	public static String[] getAuthors() {
