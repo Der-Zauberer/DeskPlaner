@@ -8,13 +8,13 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
-public class DeskLayout extends HBox {
+public class FlowLayout extends HBox {
 	
 	private VBox vbox = new VBox();
 	private ScrollPane scrollpane = new ScrollPane();
 	private FlowPane flowpane = new FlowPane();
 	
-	public DeskLayout() {
+	public FlowLayout() {
 		this.getChildren().add(new DeskNavigation());
 		this.getChildren().add(vbox);
 		HBox.setHgrow(vbox, Priority.ALWAYS);
