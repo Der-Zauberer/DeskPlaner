@@ -3,6 +3,7 @@ package deskplaner.tools;
 import deskplaner.gui.Card;
 import deskplaner.gui.DeskNavigation;
 import deskplaner.gui.NodeBuilder;
+import deskplaner.handler.FileHandler;
 import deskplaner.main.DeskPlaner;
 import deskplaner.resources.Resource;
 import deskplaner.util.Tool;
@@ -22,7 +23,7 @@ public class Dashboard extends Tool {
 		gridpane.add(NodeBuilder.createButton("Editor", event -> DeskPlaner.setScene(new Editor())), 0, 0);
 		
 		Card card = new Card("Github", "https://github.com/der-zauberer/deskplaner");
-		card.setOnMouseClicked(event -> {DeskPlaner.openWebsiteInBrowser("https://github.com/der-zauberer/deskplaner");});
+		card.setOnMouseClicked(event -> {FileHandler.openWebsiteInBrowser("https://github.com/der-zauberer/deskplaner");});
 		gridpane.add(card, 0, 2);
 		
 		gridpane.add(new Card("Test", "Text"), 0, 1);

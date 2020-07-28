@@ -2,7 +2,7 @@ package deskplaner.commands;
 
 import java.io.File;
 import deskplaner.handler.CommandHandler;
-import deskplaner.main.DeskPlaner;
+import deskplaner.handler.FileHandler;
 import deskplaner.util.Command;
 
 public class BrowserCommand implements Command{
@@ -15,13 +15,13 @@ public class BrowserCommand implements Command{
 		}
 		if (args.length >= 1) {
 			if(!CommandHandler.hasCondition(args, "-np") && !args[0].startsWith("http://") && !args[0].startsWith("https://")) {
-				if(DeskPlaner.hasVariable(args[0])) {
-					DeskPlaner.openWebsiteInBrowser(DeskPlaner.getVariable(args[0]));
+				if(FileHandler.hasVariable(args[0])) {
+					FileHandler.openWebsiteInBrowser(FileHandler.getVariable(args[0]));
 				} else {
-					DeskPlaner.openWebsiteInBrowser("https://" + args[0]);
+					FileHandler.openWebsiteInBrowser("https://" + args[0]);
 				}
 			} else {
-				DeskPlaner.openWebsiteInBrowser(args[0]);
+				FileHandler.openWebsiteInBrowser(args[0]);
 			}
 			
 		}

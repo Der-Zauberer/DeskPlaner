@@ -2,7 +2,7 @@ package deskplaner.util;
 
 import java.io.File;
 
-import deskplaner.main.DeskPlaner;
+import deskplaner.handler.FileHandler;
 import javafx.scene.Scene;
 
 public abstract class Tool {
@@ -13,8 +13,7 @@ public abstract class Tool {
 	
 	public Tool(String name) {
 		this.name = name;
-		directory = new File(DeskPlaner.getDeskPlanerDirectory().toString() + "\\tools\\" + name);
-		if(!directory.exists()) directory.mkdirs();
+		directory = FileHandler.createDirectory("\\tools\\" + name);
 	}
 	
 	public void setScene(Scene scene) {

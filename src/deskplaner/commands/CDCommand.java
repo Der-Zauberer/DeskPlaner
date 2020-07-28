@@ -3,9 +3,8 @@ package deskplaner.commands;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-
 import deskplaner.handler.CommandHandler;
-import deskplaner.main.DeskPlaner;
+import deskplaner.handler.FileHandler;
 import deskplaner.util.Command;
 
 public class CDCommand implements Command {
@@ -18,17 +17,17 @@ public class CDCommand implements Command {
 			CommandHandler.sendConsoleOutput("Directory does not exist!");
 		} else {
 			if(args[0].equalsIgnoreCase("..")) {
-				if(DeskPlaner.getDeskPlanerDirectory().equals(directory)) {
+				if(FileHandler.getDeskPlanerDirectory().equals(directory)) {
 					CommandHandler.sendConsoleOutput("Directory does not exist!");
 					return true;
 				}
-				DeskPlaner.setCurrentDirectory(DeskPlaner.getCurrentDirectory().getParentFile());
+				FileHandler.setCurrentDirectory(FileHandler.getCurrentDirectory().getParentFile());
 				return true;
 			} else if(args[0].startsWith("/") && new File(directory.toString() + args[0].replace("/", "\\")).exists()) {
-				DeskPlaner.setCurrentDirectory(new File(directory.toString() + args[0].replace("/", "\\")));
+				FileHandler.setCurrentDirectory(new File(directory.toString() + args[0].replace("/", "\\")));
 				return true;
 			} else if(Files.exists(Paths.get(directory.toString(), args[0]))) {
-				DeskPlaner.setCurrentDirectory(new File(directory.toString(), args[0]));
+				FileHandler.setCurrentDirectory(new File(directory.toString(), args[0]));
 				return true;
 			} else {
 				CommandHandler.sendConsoleOutput("Directory does not exist!");

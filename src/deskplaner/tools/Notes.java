@@ -2,9 +2,9 @@ package deskplaner.tools;
 
 import java.io.File;
 import java.util.ArrayList;
-import deskplaner.files.FileAssistent;
 import deskplaner.gui.Card;
 import deskplaner.gui.FlowLayout;
+import deskplaner.handler.FileHandler;
 import deskplaner.resources.Resource;
 import deskplaner.util.Tag;
 import deskplaner.util.Tool;
@@ -28,7 +28,7 @@ public class Notes extends Tool {
 	private void loadNotes() {
 		for(File file : this.getFiles()) {
 			String name = file.getName().substring(0, file.getName().length() - 4);
-			String text = new FileAssistent(file).readString();
+			String text = FileHandler.readString(file);
 			Note note = new Note(name, text);
 			Card card = new Card(name, text);
 			layout.getFlowPane().getChildren().add(card);

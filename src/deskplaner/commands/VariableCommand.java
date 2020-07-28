@@ -2,7 +2,7 @@ package deskplaner.commands;
 
 import java.io.File;
 import deskplaner.handler.CommandHandler;
-import deskplaner.main.DeskPlaner;
+import deskplaner.handler.FileHandler;
 import deskplaner.util.Command;
 
 public class VariableCommand implements Command {
@@ -14,22 +14,22 @@ public class VariableCommand implements Command {
 			return false;
 		}
 		if(CommandHandler.getCondition(args, "add", 0)) {
-			if(!DeskPlaner.hasVariable(args[1])) {
-				DeskPlaner.addVariable(args[1], args[2]);
+			if(!FileHandler.hasVariable(args[1])) {
+				FileHandler.addVariable(args[1], args[2]);
 				CommandHandler.sendConsoleOutput("Added " + args[1] + " variable!");
 			} else {
 				CommandHandler.sendConsoleOutput("The variable " + args[1] + " already exists!");
 			}
 		} else if(CommandHandler.getCondition(args, "remove", 0)) {
-			if(DeskPlaner.hasVariable(args[1])) {
-				DeskPlaner.removeVariable(args[1]);
+			if(FileHandler.hasVariable(args[1])) {
+				FileHandler.removeVariable(args[1]);
 				CommandHandler.sendConsoleOutput("Removed " + args[1] + " variable!");
 			} else {
 				CommandHandler.sendConsoleOutput("The variable " + args[1] + " does not exist!");
 			}
 		} else if(CommandHandler.getCondition(args, "list", 0)) {
-			for(String string : DeskPlaner.getVariables().keySet()) {
-				CommandHandler.sendConsoleOutput(string +"\t" + DeskPlaner.getVariable(string));
+			for(String string : FileHandler.getVariables().keySet()) {
+				CommandHandler.sendConsoleOutput(string +"\t" + FileHandler.getVariable(string));
 			}
 		}
 		return true;

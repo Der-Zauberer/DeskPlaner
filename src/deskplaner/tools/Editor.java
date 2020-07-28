@@ -2,9 +2,9 @@ package deskplaner.tools;
 
 import java.io.File;
 import java.util.HashMap;
-import deskplaner.files.FileAssistent;
 import deskplaner.gui.Navigation;
 import deskplaner.gui.NodeBuilder;
+import deskplaner.handler.FileHandler;
 import deskplaner.main.DeskPlaner;
 import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
@@ -44,24 +44,24 @@ public class Editor extends Scene {
 		toolbar.getItems().add(NodeBuilder.createButton("Refresh", event -> {
 			if(!tabpane.getSelectionModel().isEmpty()) {
 				File file = files.get(tabpane.getSelectionModel().getSelectedIndex());
-				textarea.setText(new FileAssistent(file).readString());
+				textarea.setText(FileHandler.readString(file));
 			}
 			refreshNavigation();
 		}));
 		toolbar.getItems().add(NodeBuilder.createButton("Save", event -> {
 			if(!tabpane.getSelectionModel().isEmpty()) {
 				File file = files.get(tabpane.getSelectionModel().getSelectedIndex());
-				new FileAssistent(file).saveString(textarea.getText());
+				FileHandler.saveString(file, textarea.getText());
 			}
 			if(!tabpane.getSelectionModel().isEmpty()) {
 				File file = files.get(tabpane.getSelectionModel().getSelectedIndex());
-				textarea.setText(new FileAssistent(file).readString());
+				textarea.setText(FileHandler.readString(file));
 			}
 		}));
 		toolbar.getItems().add(NodeBuilder.createButton("Save As", event -> {
 			if(!tabpane.getSelectionModel().isEmpty()) {
 				File file = NodeBuilder.createFileChooser("Save As", tabpane.getSelectionModel().getSelectedItem().getText()).showSaveDialog(DeskPlaner.getStage());
-				if(file != null) new FileAssistent(file).saveString(textarea.getText());
+				if(file != null) FileHandler.saveString(file, textarea.getText());
 			}
 		}));
 		
@@ -69,7 +69,7 @@ public class Editor extends Scene {
 	
 	private void refreshNavigation() {
 		navigation.getChildren().clear();
-		File files[] = DeskPlaner.getDirectory("\\home").listFiles();
+		File files[] = FileHandler.createDirectory("\\home").listFiles();
 		for (int i = 0; i < files.length; i++) {
 			if(!files[i].isDirectory()) {
 				File file = files[i];
@@ -78,7 +78,7 @@ public class Editor extends Scene {
 					for (Tab tab : tabpane.getTabs()) {
 						if(tab.getText().equals(file.getName())) {
 							tabpane.getSelectionModel().select(tab);
-							textarea.setText(new FileAssistent(file).readString());
+							textarea.setText(FileHandler.readString(file));
 							tabexist = true;
 						}
 					}
@@ -89,7 +89,7 @@ public class Editor extends Scene {
 	}
 	
 	private static void addTab(File file) {
-		Tab tab = addTab(file.getName(), new FileAssistent(file).readString());
+		Tab tab = addTab(file.getName(), FileHandler.readString(file));
 		files.put(tabpane.getTabs().indexOf(tab), file);
 	}
 	
@@ -109,7 +109,7 @@ public class Editor extends Scene {
 		tab.setOnSelectionChanged(event -> {Editor.textarea = textarea;});
 		tabpane.getTabs().add(tab);
 		tabpane.getSelectionModel().select(tab);
-		files.put(tabpane.getTabs().indexOf(tab), new File(DeskPlaner.getDirectory("\\home").toString() + "\\unnamed.txt"));
+		files.put(tabpane.getTabs().indexOf(tab), new File(FileHandler.createDirectory("\\home").toString() + "\\unnamed.txt"));
 		tab.setOnCloseRequest(event -> {
 			files.remove(tabpane.getTabs().indexOf(tab));
 		});

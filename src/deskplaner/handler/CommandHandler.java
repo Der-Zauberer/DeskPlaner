@@ -2,7 +2,6 @@ package deskplaner.handler;
 
 import java.util.Arrays;
 import java.util.HashMap;
-import deskplaner.main.DeskPlaner;
 import deskplaner.util.Command;
 
 public class CommandHandler {
@@ -26,7 +25,7 @@ public class CommandHandler {
 				sendConsoleOutput(commands.get(label).getCommandHelp());
 				return true;
 			}
-			return commands.get(label).onCommand(label, args, DeskPlaner.getCurrentDirectory());
+			return commands.get(label).onCommand(label, args, FileHandler.getCurrentDirectory());
 		}
 		return false;
 	}

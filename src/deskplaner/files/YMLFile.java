@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
+import deskplaner.handler.FileHandler;
+
 public class YMLFile {
 	
 	private File file;
@@ -12,7 +14,7 @@ public class YMLFile {
 	
 	public YMLFile(File file) {
 		this.file = file;
-		String lines[] = new FileAssistent(file).readLines();
+		String lines[] = FileHandler.readLines(file);
 		if(lines != null && lines.length > 0 && !lines[0].equals("")) {
 			for (int i = 0; i < lines.length; i++) {
 				String key = lines[i].split(": ", 2)[0];
@@ -59,7 +61,7 @@ public class YMLFile {
 			lines[i] = key + ": " + entries.get(key).toString();
 			i++;
 		}
-		new FileAssistent(file).saveString(lines);
+		FileHandler.saveLines(file, lines);
 	}
 
 }
