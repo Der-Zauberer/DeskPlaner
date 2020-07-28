@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Scanner;
 import deskplaner.commands.BrowserCommand;
@@ -18,9 +17,9 @@ import deskplaner.commands.VariableCommand;
 import deskplaner.commands.VersionCommand;
 import deskplaner.files.YMLFile;
 import deskplaner.gui.DeskNavigation;
+import deskplaner.handler.CommandHandler;
 import deskplaner.tools.Dashboard;
 import deskplaner.tools.Notes;
-import deskplaner.util.Command;
 import deskplaner.util.Tool;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -35,7 +34,6 @@ public class DeskPlaner extends Application {
 	private static Stage stage;
 	private static File currentdirectory;
 	private static YMLFile settings;
-	private static HashMap<String, Command> commands = new HashMap<>();
 	private static ArrayList<Tool> tools = new ArrayList<>();
 	private static HashMap<String, String> variable = new HashMap<>();
 	
@@ -71,11 +69,7 @@ public class DeskPlaner extends Application {
 				String currentlocation = location.substring(getDeskPlanerDirectory().getParentFile().toString().length() + 1);
 				currentlocation = currentlocation.replace("\\", "/");
 				System.out.print(prefix + currentlocation + "~ " + suffix);
-				String input = scanner.nextLine();
-				String command[] = input.split(" ");
-				String label = command[0];
-				String args[] = Arrays.copyOfRange(command, 1, command.length);
-				executeCommand(label, args);
+				CommandHandler.executeCommand(scanner.nextLine());
 			}
 		}).start();
 	}
@@ -97,42 +91,19 @@ public class DeskPlaner extends Application {
 	}
 	
 	private static void registerCommands() {
-		registerCommand("browser", new BrowserCommand());
-		registerCommand("cd", new CDCommand());
-		registerCommand("ls", new LSCommand());
-		registerCommand("mkdir", new MkDirCommand());
-		registerCommand("rm", new RMCommand());
-		registerCommand("variable", new VariableCommand());
-		registerCommand("version", new VersionCommand());
+		CommandHandler.registerCommand("browser", new BrowserCommand());
+		CommandHandler.registerCommand("cd", new CDCommand());
+		CommandHandler.registerCommand("ls", new LSCommand());
+		CommandHandler.registerCommand("mkdir", new MkDirCommand());
+		CommandHandler.registerCommand("rm", new RMCommand());
+		CommandHandler.registerCommand("variable", new VariableCommand());
+		CommandHandler.registerCommand("version", new VersionCommand());
 	}
 	
 	private static void registerScenes() {
 		registerTool(new Dashboard());
 		registerTool(new Notes());
 		DeskNavigation.updateNavigation();
-	}
-	
-	public static void sendConsoleOutput(Object object) {
-		System.out.println(object);
-	}
-	
-	public static void registerCommand(String label, Command command) {
-		commands.put(label, command);
-	}
-	
-	public static boolean executeCommand(String label, String args[]) {
-		if(commands.containsKey(label)) {
-			if(args.length > 0 && args[0].equalsIgnoreCase("help")) {
-				sendConsoleOutput(commands.get(label).getCommandHelp());
-				return true;
-			}
-			return commands.get(label).onCommand(label, args, getCurrentDirectory());
-		}
-		return false;
-	}
-	
-	public static HashMap<String, Command> getCommands() {
-		return commands;
 	}
 	
 	public static void registerTool(Tool tool) {

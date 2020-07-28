@@ -1,7 +1,7 @@
 package deskplaner.commands;
 
 import java.io.File;
-import java.util.Arrays;
+import deskplaner.handler.CommandHandler;
 import deskplaner.main.DeskPlaner;
 import deskplaner.util.Command;
 
@@ -10,11 +10,11 @@ public class BrowserCommand implements Command{
 	@Override
 	public boolean onCommand(String label, String[] args, File directory) {
 		if(args.length == 0) {
-			DeskPlaner.sendConsoleOutput(getCommandHelp());
+			CommandHandler.sendConsoleOutput(getCommandHelp());
 			return false;
 		}
 		if (args.length >= 1) {
-			if(!Arrays.asList(args).contains("-np") && !args[0].startsWith("http://") && !args[0].startsWith("https://")) {
+			if(!CommandHandler.hasCondition(args, "-np") && !args[0].startsWith("http://") && !args[0].startsWith("https://")) {
 				if(DeskPlaner.hasVariable(args[0])) {
 					DeskPlaner.openWebsiteInBrowser(DeskPlaner.getVariable(args[0]));
 				} else {

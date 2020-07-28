@@ -36,6 +36,7 @@ public class Notes extends Tool {
 	}
 
 }
+
 class Note {
 	
 	private static ArrayList<Note> notes = new ArrayList<>();

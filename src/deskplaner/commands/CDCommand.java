@@ -3,6 +3,8 @@ package deskplaner.commands;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+
+import deskplaner.handler.CommandHandler;
 import deskplaner.main.DeskPlaner;
 import deskplaner.util.Command;
 
@@ -11,13 +13,13 @@ public class CDCommand implements Command {
 	@Override
 	public boolean onCommand(String label, String[] args, File directory) {
 		if(args.length == 0) {
-			DeskPlaner.sendConsoleOutput(getCommandHelp());
+			CommandHandler.sendConsoleOutput(getCommandHelp());
 		} else if(args[0].equalsIgnoreCase(".")){
-			DeskPlaner.sendConsoleOutput("Directory does not exist!");
+			CommandHandler.sendConsoleOutput("Directory does not exist!");
 		} else {
 			if(args[0].equalsIgnoreCase("..")) {
 				if(DeskPlaner.getDeskPlanerDirectory().equals(directory)) {
-					DeskPlaner.sendConsoleOutput("Directory does not exist!");
+					CommandHandler.sendConsoleOutput("Directory does not exist!");
 					return true;
 				}
 				DeskPlaner.setCurrentDirectory(DeskPlaner.getCurrentDirectory().getParentFile());
@@ -29,7 +31,7 @@ public class CDCommand implements Command {
 				DeskPlaner.setCurrentDirectory(new File(directory.toString(), args[0]));
 				return true;
 			} else {
-				DeskPlaner.sendConsoleOutput("Directory does not exist!");
+				CommandHandler.sendConsoleOutput("Directory does not exist!");
 			}
 		}
 		return false;
