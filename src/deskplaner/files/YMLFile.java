@@ -1,7 +1,6 @@
 package deskplaner.files;
 
 import java.io.File;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -88,7 +87,6 @@ public class YMLFile {
 		String keys[];
 		if(prefix.split("\\.").length > 0) {
 			keys = prefix.split("\\.");
-			Arrays.toString(keys);
 		} else {
 			keys = new String[1];
 			keys[0] = prefix;
