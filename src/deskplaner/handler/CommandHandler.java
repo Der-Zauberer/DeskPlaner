@@ -20,12 +20,14 @@ public class CommandHandler {
 	}
 	
 	public static boolean executeCommand(String label, String args[]) {
-		if(commands.containsKey(label)) {
-			if(args.length > 0 && args[0].equalsIgnoreCase("help")) {
-				sendConsoleOutput(commands.get(label).getCommandHelp());
-				return true;
+		for(String string : commands.keySet()) {
+			if(string.equalsIgnoreCase(label)) {
+				if(args.length > 0 && args[0].equalsIgnoreCase("help")) {
+					sendConsoleOutput(commands.get(string).getCommandHelp());
+					return true;
+				}
+				return commands.get(string).onCommand(string, args, FileHandler.getCurrentDirectory());
 			}
-			return commands.get(label).onCommand(label, args, FileHandler.getCurrentDirectory());
 		}
 		return false;
 	}

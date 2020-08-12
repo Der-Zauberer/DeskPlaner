@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import deskplaner.commands.BrowserCommand;
 import deskplaner.commands.CDCommand;
+import deskplaner.commands.HelpCommand;
 import deskplaner.commands.LSCommand;
 import deskplaner.commands.MkDirCommand;
 import deskplaner.commands.RMCommand;
@@ -75,6 +76,7 @@ public class DeskPlaner extends Application {
 	private static void registerCommands() {
 		CommandHandler.registerCommand("browser", new BrowserCommand());
 		CommandHandler.registerCommand("cd", new CDCommand());
+		CommandHandler.registerCommand("help", new HelpCommand());
 		CommandHandler.registerCommand("ls", new LSCommand());
 		CommandHandler.registerCommand("mkdir", new MkDirCommand());
 		CommandHandler.registerCommand("rm", new RMCommand());
