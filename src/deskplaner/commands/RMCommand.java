@@ -33,7 +33,7 @@ public class RMCommand implements Command {
 
 	@Override
 	public String getCommandHelp() {
-		String string = "rm [name] Remove a files or directory.\n";
+		String string = "rm [name] Remove a file or directory.\n";
 		string += "name\tString\tName of the file or directory";
 		return string;
 	}

@@ -37,7 +37,7 @@ public class VariableCommand implements Command {
 
 	@Override
 	public String getCommandHelp() {
-		String string = "variable <action> [name] [url] Set ore remove a path variable\n";
+		String string = "variable <action> [name] [url] Set or remove a path variable\n";
 		string += "action\tString\t\tUse add, remove or list to modify the variables\n";
 		string += "name\tString\t\tThe name of the path variable\n";
 		string += "url\tString\t\tThe target of the path variable";
