@@ -19,7 +19,6 @@ public class Notes extends Tool {
 		loadNotes();
 		initializeGui();
 		reloadGuiNotes();
-		reloadGuiNotes();
 	}
 	
 	private void initializeGui() {
@@ -43,17 +42,31 @@ public class Notes extends Tool {
 		}
 	}
 	
+	private void saveNote(String oldname, String newname, String text) {
+		for(File file : getFiles()) {
+			if(file.getName().equals(oldname + ".txt")) {
+				File newfile = new File(this.getToolDirectory() + "\\" + newname + ".txt");
+				FileHandler.saveString(newfile, text);
+				file.delete();
+				return;
+			}
+		}
+		FileHandler.saveString(new File(this.getToolDirectory() + "\\" + newname + ".txt"), text);
+	}
+	
 	public void addNote(String name, String text) {
 		if(Note.getNote(name) == null) {
 			new Note(name, text);
+			saveNote(null, name, text);
 		}
 	}
 	
-	public void editNote(String oldname, String newname, String newtext) {
+	public void editNote(String oldname, String newname, String text) {
 		if(Note.getNote(newname) == null) {
 			Note note = Note.getNote(oldname);
 			note.setName(newname);
-			note.setText(newtext);
+			note.setText(text);
+			saveNote(oldname, newname, text);
 		}
 	}
 	
