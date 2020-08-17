@@ -16,23 +16,71 @@ public class Notes extends Tool {
 	
 	public Notes() {
 		super("Notes");
-		initzializeGui();
 		loadNotes();
+		initializeGui();
+		reloadGuiNotes();
+		reloadGuiNotes();
 	}
 	
-	private void initzializeGui() {
+	private void initializeGui() {
 		this.setScene(new Scene(layout));
 		this.getScene().getStylesheets().add(Resource.getStyleSheet("style.css"));
+	}
+	
+	public void reloadGuiNotes() {
+		layout.getFlowPane().getChildren().clear();
+		for(String name : getNotes()) {
+			Card card = new Card(name, getNoteText(name));
+			layout.getFlowPane().getChildren().add(card);
+		}
 	}
 	
 	private void loadNotes() {
 		for(File file : this.getFiles()) {
 			String name = file.getName().substring(0, file.getName().length() - 4);
 			String text = FileHandler.readString(file);
-			Note note = new Note(name, text);
-			Card card = new Card(name, text);
-			layout.getFlowPane().getChildren().add(card);
+			addNote(name, text);
 		}
+	}
+	
+	public void addNote(String name, String text) {
+		if(Note.getNote(name) == null) {
+			new Note(name, text);
+		}
+	}
+	
+	public void editNote(String oldname, String newname, String newtext) {
+		if(Note.getNote(newname) == null) {
+			Note note = Note.getNote(oldname);
+			note.setName(newname);
+			note.setText(newtext);
+		}
+	}
+	
+	public String getNoteText(String name) {
+		return Note.getNote(name).getText();
+	}
+	
+	public void addNoteTag(String name, Tag tag) {
+		if(!Note.getNote(name).getTags().contains(tag)) {
+			Note.getNote(name).getTags().add(tag);
+		}
+	}
+	
+	public void removeNoteTag(String name, Tag tag) {
+		Note.getNote(name).getTags().remove(tag);
+	}
+	
+	public ArrayList<Tag> getNoteTags(String name) {
+		return Note.getNote(name).getTags();
+	}
+	
+	public ArrayList<String> getNotes() {
+		ArrayList<String> notes = new ArrayList<String>();
+		for(Note note : Note.getNotes()) {
+			notes.add(note.getName());
+		}
+		return notes;
 	}
 
 }
@@ -72,6 +120,15 @@ class Note {
 	
 	public static void removeNote(Note note) {
 		notes.remove(note);
+	}
+	
+	public static Note getNote(String name) {
+		for(Note note : notes) {
+			if(note.getName().equals(name)) {
+				return note;
+			}
+		}
+		return null;
 	}
 	
 	public static ArrayList<Note> getNotes() {
