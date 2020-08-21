@@ -15,7 +15,7 @@ public class Card extends VBox {
 	
 	public Card() {
 		this.getStyleClass().add("card");
-		this.setMinWidth(220);		
+		this.setMinWidth(220);
 		top = new VBox();
 		this.getChildren().add(top);
 		top.getStyleClass().add("card-top");

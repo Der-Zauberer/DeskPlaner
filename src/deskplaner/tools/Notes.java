@@ -9,6 +9,7 @@ import deskplaner.resources.Resource;
 import deskplaner.util.Tag;
 import deskplaner.util.Tool;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 
 public class Notes extends Tool {
 	
@@ -30,6 +31,8 @@ public class Notes extends Tool {
 		layout.getFlowPane().getChildren().clear();
 		for(String name : getNotes()) {
 			Card card = new Card(name, getNoteText(name));
+			card.initializeToolBar();
+			card.getToolbar().getItems().add(new Button("Edit"));
 			layout.getFlowPane().getChildren().add(card);
 		}
 	}
