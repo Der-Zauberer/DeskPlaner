@@ -10,6 +10,9 @@ import deskplaner.util.Tag;
 import deskplaner.util.Tool;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
 
 public class Notes extends Tool {
 	
@@ -32,7 +35,25 @@ public class Notes extends Tool {
 		for(String name : getNotes()) {
 			Card card = new Card(name, getNoteText(name));
 			card.initializeToolBar();
-			card.getToolbar().getItems().add(new Button("Edit"));
+			Pane pane = new Pane();
+	        HBox.setHgrow(pane, Priority.SOMETIMES);
+			Button btedit = new Button("Edit");
+			Button btdelete = new Button("Delete");
+			Button btcancel = new Button("Cancel");
+			Button btsave = new Button("Save");
+			btedit.setOnAction(event -> {
+				card.getToolbar().getItems().clear();
+				card.setToolbarColorBlue();
+				card.setEditMode();
+				card.getToolbar().getItems().addAll(btdelete, pane, btcancel, btsave);
+			});
+			btsave.setOnAction(event -> {
+				card.getToolbar().getItems().clear();
+				card.resetToolBarColors();
+				card.setReadMode();
+				card.getToolbar().getItems().add(btedit);
+			});
+			card.getToolbar().getItems().addAll(btedit);
 			layout.getFlowPane().getChildren().add(card);
 		}
 	}

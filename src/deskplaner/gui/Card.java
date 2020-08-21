@@ -2,7 +2,10 @@ package deskplaner.gui;
 
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.control.ToolBar;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
 public class Card extends VBox {
@@ -11,6 +14,8 @@ public class Card extends VBox {
 	private VBox bottom;
 	private Label title;
 	private Label text;
+	TextField textfield;
+	TextArea textarea;
 	private ToolBar toolbar;
 	
 	public Card() {
@@ -88,6 +93,26 @@ public class Card extends VBox {
 		return text;
 	}
 	
+	public void setEditMode() {
+		String title = "";
+		String text = "";
+		if(this.title != null) {title = this.title.getText(); top.getChildren().remove(this.title); this.title = null;}
+		if(this.text != null) {text = this.text.getText(); top.getChildren().remove(this.text); this.text = null;}
+		this.textfield = new TextField(title);
+		Pane pane = new Pane();
+		pane.setPrefHeight(20);
+		textarea = new TextArea(text);
+		this.top.getChildren().addAll(this.textfield, pane, this.textarea);
+	}
+	
+	public void setReadMode() {
+		String title = textfield.getText();
+		String text = textarea.getText();
+		this.top.getChildren().clear();
+		setTitle(title);
+		setText(text);
+	}
+	
 	public void initializeToolBar() {
 		toolbar = new ToolBar();
 		bottom.getChildren().add(toolbar);
@@ -98,6 +123,19 @@ public class Card extends VBox {
 		bottom.getChildren().remove(toolbar);
 		top.getStyleClass().remove("top-radius");
 		toolbar = null;
+	}
+	
+	public void setToolbarColorBlue() {
+		toolbar.getStyleClass().add("liblue");
+	}
+	
+	public void setToolbarColorRed() {
+		toolbar.getStyleClass().add("red");
+	}
+	
+	public void resetToolBarColors() {
+		toolbar.getStyleClass().remove("liblue");
+		toolbar.getStyleClass().remove("red");
 	}
 	
 	public ToolBar getToolbar() {
