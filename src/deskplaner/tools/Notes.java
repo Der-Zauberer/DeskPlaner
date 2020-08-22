@@ -34,6 +34,8 @@ public class Notes extends Tool {
 		layout.getFlowPane().getChildren().clear();
 		for(String name : getNotes()) {
 			Card card = new Card(name, getNoteText(name));
+			card.setMinWidth(250);
+			card.setMaxWidth(500);
 			card.initializeToolBar();
 			Pane pane = new Pane();
 	        HBox.setHgrow(pane, Priority.SOMETIMES);
@@ -50,8 +52,18 @@ public class Notes extends Tool {
 			btsave.setOnAction(event -> {
 				card.getToolbar().getItems().clear();
 				card.resetToolBarColors();
-				card.setReadMode();
+				saveNote(card.setReadMode(true), card.getTitle().getText(), card.getText().getText());
 				card.getToolbar().getItems().add(btedit);
+			});
+			btcancel.setOnAction(event -> {
+				card.getToolbar().getItems().clear();
+				card.resetToolBarColors();
+				card.setReadMode(false);
+				card.getToolbar().getItems().add(btedit);
+			});
+			btdelete.setOnAction(event -> {
+				removeNote(name);
+				layout.getFlowPane().getChildren().remove(card);
 			});
 			card.getToolbar().getItems().addAll(btedit);
 			layout.getFlowPane().getChildren().add(card);
@@ -67,21 +79,35 @@ public class Notes extends Tool {
 	}
 	
 	private void saveNote(String oldname, String newname, String text) {
-		for(File file : getFiles()) {
-			if(file.getName().equals(oldname + ".txt")) {
-				File newfile = new File(this.getToolDirectory() + "\\" + newname + ".txt");
-				FileHandler.saveString(newfile, text);
-				file.delete();
-				return;
+		if(oldname != null && !oldname.equals(newname)) {
+			for(File file : getFiles()) {
+				if(file.getName().equals(oldname + ".txt")) {
+					File newfile = new File(this.getToolDirectory() + "\\" + newname + ".txt");
+					FileHandler.saveString(newfile, text);
+					file.delete();
+				}
 			}
+		} else {
+			FileHandler.saveString(new File(this.getToolDirectory() + "\\" + newname + ".txt"), text);
 		}
-		FileHandler.saveString(new File(this.getToolDirectory() + "\\" + newname + ".txt"), text);
+	}
+	
+	private void deleteNote(String name) {
+		File file = new File(this.getToolDirectory() + "\\" + name + ".txt");
+		if(file.exists()) file.delete();
 	}
 	
 	public void addNote(String name, String text) {
 		if(Note.getNote(name) == null) {
 			new Note(name, text);
 			saveNote(null, name, text);
+		}
+	}
+	
+	public void removeNote(String name) {
+		if(Note.getNote(name) != null) {
+			Note.getNotes().remove(Note.getNote(name));
+			deleteNote(name);
 		}
 	}
 	

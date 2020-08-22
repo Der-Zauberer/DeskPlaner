@@ -30,7 +30,7 @@ public class FileHandler {
 		}
 	}
 	
-	public static void createFile(File file) {
+	public static File createFile(File file) {
 		if(!file.exists()) {
 			try {
 				file.createNewFile();
@@ -38,10 +38,7 @@ public class FileHandler {
 				exception.printStackTrace();
 			}
 		}
-	}
-	
-	public static void createFile(File directory, String filename) {
-		createFile(new File(directory.toString() + filename));
+		return file;
 	}
 	
 	public static String readString(File file) {

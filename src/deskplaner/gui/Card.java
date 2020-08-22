@@ -17,6 +17,8 @@ public class Card extends VBox {
 	TextField textfield;
 	TextArea textarea;
 	private ToolBar toolbar;
+	private String temptitle;
+	private String temptext;
 	
 	public Card() {
 		this.getStyleClass().add("card");
@@ -93,24 +95,43 @@ public class Card extends VBox {
 		return text;
 	}
 	
+	public TextField getTextField() {
+		return textfield;
+	}
+	
+	public TextArea getTextArea() {
+		return textarea;
+	}
+	
 	public void setEditMode() {
+		this.temptitle = getTitle().getText();
+		this.temptext = getText().getText();
 		String title = "";
 		String text = "";
 		if(this.title != null) {title = this.title.getText(); top.getChildren().remove(this.title); this.title = null;}
 		if(this.text != null) {text = this.text.getText(); top.getChildren().remove(this.text); this.text = null;}
 		this.textfield = new TextField(title);
+		this.textfield.getStyleClass().add("title");
 		Pane pane = new Pane();
 		pane.setPrefHeight(20);
 		textarea = new TextArea(text);
 		this.top.getChildren().addAll(this.textfield, pane, this.textarea);
 	}
 	
-	public void setReadMode() {
-		String title = textfield.getText();
-		String text = textarea.getText();
+	public String setReadMode(boolean savechanges) {
+		String title;
+		String text;
+		if(savechanges) {
+			title = this.textfield.getText();
+			text = this.textarea.getText();
+		} else {
+			title = this.temptitle;
+			text = this.temptext;
+		}
 		this.top.getChildren().clear();
 		setTitle(title);
 		setText(text);
+		return this.temptitle;
 	}
 	
 	public void initializeToolBar() {

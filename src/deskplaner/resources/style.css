@@ -24,6 +24,13 @@
 .dark-red{-fx-background-color: #b30000 !important; -fx-text-fill: white !important;}
 .red{-fx-background-color: #ff0000 !important; -fx-text-fill: white !important;}
 
+.dark-liblue *,
+.liblue *,
+.dark-red *,
+.red *{
+	-fx-text-fill: white !important;
+}
+
 .top-radius{
 	-fx-background-radius: 5px 5px 0px 0px !important;
 }
@@ -109,6 +116,10 @@
 	-fx-background-color: transparent;
 }
 
+.card ToolBar .active{
+	-fx-text-fill: white;
+}
+
 .card TextField,
 .card TextArea,
 .card TextArea .scroll-pane,
@@ -116,4 +127,5 @@
 .card TextArea .scroll-pane .content{
 	-fx-padding: 0px;
 	-fx-background-color: transparent;
+	-fx-highlight-fill: #0080ff;
 }
