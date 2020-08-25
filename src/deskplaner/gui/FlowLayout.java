@@ -3,6 +3,7 @@ package deskplaner.gui;
 import javafx.geometry.Insets;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
+import javafx.scene.control.ToolBar;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -11,6 +12,7 @@ import javafx.scene.layout.VBox;
 public class FlowLayout extends HBox {
 	
 	private VBox vbox = new VBox();
+	private ToolBar toolbar;
 	private ScrollPane scrollpane = new ScrollPane();
 	private FlowPane flowpane = new FlowPane();
 	
@@ -31,6 +33,15 @@ public class FlowLayout extends HBox {
 		flowpane.setPadding(new Insets(40));
 		flowpane.setHgap(20);
 		flowpane.setVgap(20);
+	}
+	
+	public ToolBar getToolBar() {
+		if(toolbar == null) {
+			toolbar = new ToolBar();
+			vbox.getChildren().clear();
+			vbox.getChildren().addAll(toolbar, scrollpane);
+		}
+		return toolbar;
 	}
 	
 	public FlowPane getFlowPane() {

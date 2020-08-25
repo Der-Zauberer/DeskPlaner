@@ -8,6 +8,7 @@ import deskplaner.handler.FileHandler;
 import deskplaner.resources.Resource;
 import deskplaner.util.Tag;
 import deskplaner.util.Tool;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
@@ -32,42 +33,53 @@ public class Notes extends Tool {
 	
 	public void reloadGuiNotes() {
 		layout.getFlowPane().getChildren().clear();
+		Button btadd = new Button("Add");
+		layout.getToolBar().setPadding(new Insets(20, 40, 20 ,40));
+		layout.getToolBar().getItems().add(btadd);
 		for(String name : getNotes()) {
-			Card card = new Card(name, getNoteText(name));
-			card.setMinWidth(250);
-			card.setMaxWidth(500);
-			card.initializeToolBar();
-			Pane pane = new Pane();
-	        HBox.setHgrow(pane, Priority.SOMETIMES);
-			Button btedit = new Button("Edit");
-			Button btdelete = new Button("Delete");
-			Button btcancel = new Button("Cancel");
-			Button btsave = new Button("Save");
-			btedit.setOnAction(event -> {
-				card.getToolbar().getItems().clear();
-				card.setToolbarColorBlue();
-				card.setEditMode();
-				card.getToolbar().getItems().addAll(btdelete, pane, btcancel, btsave);
-			});
-			btsave.setOnAction(event -> {
-				card.getToolbar().getItems().clear();
-				card.resetToolBarColors();
-				saveNote(card.setReadMode(true), card.getTitle().getText(), card.getText().getText());
-				card.getToolbar().getItems().add(btedit);
-			});
-			btcancel.setOnAction(event -> {
-				card.getToolbar().getItems().clear();
-				card.resetToolBarColors();
-				card.setReadMode(false);
-				card.getToolbar().getItems().add(btedit);
-			});
-			btdelete.setOnAction(event -> {
-				removeNote(name);
-				layout.getFlowPane().getChildren().remove(card);
-			});
-			card.getToolbar().getItems().addAll(btedit);
-			layout.getFlowPane().getChildren().add(card);
+			createGuiNote(name, getNoteText(name));
 		}
+		btadd.setOnAction(event -> {
+			Card card = createGuiNote("Unnamed", "Text here...");
+			saveNote(null, card.getTitle().getText(), card.getText().getText());
+		});
+	}
+	
+	private Card createGuiNote(String name, String text) {
+		Card card = new Card(name, text);
+		card.setMinWidth(250);
+		card.setMaxWidth(500);
+		Pane pane = new Pane();
+        HBox.setHgrow(pane, Priority.SOMETIMES);
+		Button btedit = new Button("Edit");
+		Button btdelete = new Button("Delete");
+		Button btcancel = new Button("Cancel");
+		Button btsave = new Button("Save");
+		btedit.setOnAction(event -> {
+			card.getToolbar().getItems().clear();
+			card.setToolbarColorBlue();
+			card.setEditMode();
+			card.getToolbar().getItems().addAll(btdelete, pane, btcancel, btsave);
+		});
+		btsave.setOnAction(event -> {
+			card.getToolbar().getItems().clear();
+			card.resetToolBarColors();
+			saveNote(card.setReadMode(true), card.getTitle().getText(), card.getText().getText());
+			card.getToolbar().getItems().add(btedit);
+		});
+		btcancel.setOnAction(event -> {
+			card.getToolbar().getItems().clear();
+			card.resetToolBarColors();
+			card.setReadMode(false);
+			card.getToolbar().getItems().add(btedit);
+		});
+		btdelete.setOnAction(event -> {
+			removeNote(name);
+			layout.getFlowPane().getChildren().remove(card);
+		});
+		card.getToolbar().getItems().addAll(btedit);
+		layout.getFlowPane().getChildren().add(card);
+		return card;
 	}
 	
 	private void loadNotes() {

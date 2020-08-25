@@ -134,18 +134,6 @@ public class Card extends VBox {
 		return this.temptitle;
 	}
 	
-	public void initializeToolBar() {
-		toolbar = new ToolBar();
-		bottom.getChildren().add(toolbar);
-		top.getStyleClass().add("top-radius");
-	}
-	
-	public void removeToolBar() {
-		bottom.getChildren().remove(toolbar);
-		top.getStyleClass().remove("top-radius");
-		toolbar = null;
-	}
-	
 	public void setToolbarColorBlue() {
 		toolbar.getStyleClass().add("liblue");
 	}
@@ -160,6 +148,11 @@ public class Card extends VBox {
 	}
 	
 	public ToolBar getToolbar() {
+		if(toolbar == null) {
+			toolbar = new ToolBar();
+			bottom.getChildren().add(toolbar);
+			top.getStyleClass().add("top-radius");
+		}
 		return toolbar;
 	}
 	

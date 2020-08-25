@@ -129,3 +129,17 @@
 	-fx-background-color: transparent;
 	-fx-highlight-fill: #0080ff;
 }
+
+ToolBar{
+	-fx-background-color: transparent;
+}
+
+ToolBar Button{
+	-fx-background-color: #e6e6e6;
+	-fx-background-radius: 5px;
+	-fx-font-size: 16px;
+}
+
+ToolBar Button:hover{
+	-fx-background-color: #d9d9d9;
+}
