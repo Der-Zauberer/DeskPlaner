@@ -15,11 +15,11 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 
-public class Notes extends Tool {
+public class NotesTool extends Tool {
 	
 	private static FlowLayout layout = new FlowLayout();
 	
-	public Notes() {
+	public NotesTool() {
 		super("Notes");
 		loadNotes();
 		initializeGui();

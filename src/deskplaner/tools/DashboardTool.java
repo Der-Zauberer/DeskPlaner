@@ -12,15 +12,15 @@ import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 
-public class Dashboard extends Tool {
+public class DashboardTool extends Tool {
 
 	private static BorderPane borderpane = new BorderPane();
 	private static GridPane gridpane = new GridPane();
 	
-	public Dashboard() {
+	public DashboardTool() {
 		super("Dashboard");
 		initializeGui();
-		gridpane.add(NodeBuilder.createButton("Editor", event -> DeskPlaner.setScene(new Editor())), 0, 0);
+		gridpane.add(NodeBuilder.createButton("Editor", event -> DeskPlaner.setScene(new EditorTool())), 0, 0);
 		
 		Card card = new Card("Github", "https://github.com/der-zauberer/deskplaner");
 		card.setOnMouseClicked(event -> {FileHandler.openWebsiteInBrowser("https://github.com/der-zauberer/deskplaner");});

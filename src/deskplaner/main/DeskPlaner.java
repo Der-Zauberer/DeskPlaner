@@ -13,8 +13,8 @@ import deskplaner.commands.VersionCommand;
 import deskplaner.gui.DeskNavigation;
 import deskplaner.handler.CommandHandler;
 import deskplaner.handler.FileHandler;
-import deskplaner.tools.Dashboard;
-import deskplaner.tools.Notes;
+import deskplaner.tools.DashboardTool;
+import deskplaner.tools.NotesTool;
 import deskplaner.util.Tool;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -85,8 +85,8 @@ public class DeskPlaner extends Application {
 	}
 	
 	private static void registerScenes() {
-		registerTool(new Dashboard());
-		registerTool(new Notes());
+		registerTool(new DashboardTool());
+		registerTool(new NotesTool());
 		DeskNavigation.updateNavigation();
 	}
 	
