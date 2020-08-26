@@ -11,6 +11,7 @@ import deskplaner.commands.RMCommand;
 import deskplaner.commands.VariableCommand;
 import deskplaner.commands.VersionCommand;
 import deskplaner.gui.DeskNavigation;
+import deskplaner.gui.DeskStage;
 import deskplaner.handler.CommandHandler;
 import deskplaner.handler.FileHandler;
 import deskplaner.tools.DashboardTool;
@@ -41,13 +42,9 @@ public class DeskPlaner extends Application {
 	@Override
 	public void start(Stage stage) throws Exception {
 		registerScenes();
-		stage = new Stage();
+		stage = new DeskStage(getName(), false, true);
 		DeskPlaner.stage = stage;
 		stage.setScene(getTool("Dashboard").getScene());
-		stage.setTitle(getName());
-		stage.setHeight(720);
-		stage.setWidth(1280);
-		stage.setOnCloseRequest(event -> System.exit(0));
 		stage.show();
 	}
 	
