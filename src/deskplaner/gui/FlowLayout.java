@@ -38,6 +38,7 @@ public class FlowLayout extends HBox {
 	public ToolBar getToolBar() {
 		if(toolbar == null) {
 			toolbar = new ToolBar();
+			flowpane.setPadding(new Insets(0, 40, 40, 40));
 			vbox.getChildren().clear();
 			vbox.getChildren().addAll(toolbar, scrollpane);
 		}

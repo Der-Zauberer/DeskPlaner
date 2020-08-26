@@ -44,8 +44,8 @@ public class NotesTool extends Tool {
 	
 	private Card createGuiNote(Note note) {
 		Card card = new Card(note.getName(), note.getText());
-		card.setMinWidth(250);
-		card.setMaxWidth(500);
+		card.setMinWidth(290);
+		card.setMaxWidth(600);
 		Pane pane = new Pane();
         HBox.setHgrow(pane, Priority.SOMETIMES);
 		Button btedit = new Button("Edit");
