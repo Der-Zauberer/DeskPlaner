@@ -132,6 +132,7 @@
 
 ToolBar{
 	-fx-background-color: transparent;
+	-fx-spacing: 10px;
 }
 
 ToolBar Button{
@@ -142,4 +143,12 @@ ToolBar Button{
 
 ToolBar Button:hover{
 	-fx-background-color: #d9d9d9;
+}
+
+ToolBar TextField{
+	-fx-background-color: #e6e6e6;
+	-fx-background-radius: 5px;
+	-fx-font-size: 16px;
+	-fx-padding: 7px;
+	-fx-highlight-fill: #0080ff;
 }

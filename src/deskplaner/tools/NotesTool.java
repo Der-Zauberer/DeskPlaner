@@ -1,13 +1,17 @@
 package deskplaner.tools;
 
+import java.util.ArrayList;
+
 import deskplaner.gui.Card;
 import deskplaner.gui.FlowLayout;
 import deskplaner.resources.Resource;
 import deskplaner.util.Note;
 import deskplaner.util.Tool;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
@@ -32,13 +36,37 @@ public class NotesTool extends Tool {
 	public void reloadGuiNotes() {
 		layout.getFlowPane().getChildren().clear();
 		Button btadd = new Button("Add");
+		TextField tfsearch = new TextField();
+		tfsearch.setText("Search");
 		layout.getToolBar().setPadding(new Insets(20, 40, 20 ,40));
-		layout.getToolBar().getItems().add(btadd);
+		layout.getToolBar().getItems().addAll(btadd, tfsearch);
 		for(Note note : Note.getNotes()) {
 			createGuiNote(note);
 		}
 		btadd.setOnAction(event -> {
 			createGuiNote(new Note("Unnamed", "Text here..."));
+		});
+		tfsearch.setOnAction(event -> {
+			ArrayList<Node> nodes = new ArrayList<>();
+			for(Node node : layout.getFlowPane().getChildren()) {
+				if(node instanceof Card) {
+					nodes.add(node);
+				}
+			}
+			for (Node node : nodes) {
+				layout.getFlowPane().getChildren().remove(node);
+			}
+			if(tfsearch.getText().equals("")) {
+				for(Note note : Note.getNotes()) {
+					createGuiNote(note);
+				}
+			} else {
+				for(Note note : Note.getNotes()) {
+					if(note.getName().contains(tfsearch.getText())) {
+						createGuiNote(note);
+					}
+				}
+			}
 		});
 	}
 	
