@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
-
 import deskplaner.handler.FileHandler;
 
 public class YMLFile {
@@ -15,19 +14,7 @@ public class YMLFile {
 	public YMLFile(File file) {
 		this.file = file;
 		FileHandler.createFile(file);
-		String lines[] = FileHandler.readLines(file);
-		if(lines != null && lines.length > 0 && !lines[0].equals("")) {
-			String prefix = "";
-			for (int i = 0; i < lines.length; i++) {
-				String key = lines[i].split(":", 2)[0];
-				key = getFullKey(prefix, key);
-				prefix = key;
-				if(lines[i].split(": ", 2).length == 2) {
-					String value = lines[i].split(": ", 2)[1];
-					entries.put(key, value);
-				}
-			}
-		}
+		read();
 	}
 	
 	public void set(String key, String value) {
@@ -60,6 +47,33 @@ public class YMLFile {
 		return keyset;
 	}
 	
+	public void read() {
+		String lines[] = FileHandler.readLines(file);
+		String key = "";
+		if(lines != null && lines.length > 0 && !lines[0].equals("")) {
+			for (int i = 0; i < lines.length; i++) {
+				int layer = getLayer(lines[i]);
+				String name = lines[i].split(":", 2)[0];
+				name = name.substring(layer * 4);
+				if(key.split("\\.").length > layer && layer != 0) {
+					String keys[] = key.split("\\.");
+					key = "";
+					for (int j = 0; j < layer; j++) {
+						if(!key.equals("")) {key += ".";}
+						key += keys[j];
+					}
+				}
+				if(!key.equals("")) {key += ".";}
+				key += name;
+				if(lines[i].split(": ", 2).length > 1) {
+					String value = lines[i].split(": ", 2)[1];
+					entries.put(key, value);
+				}
+				
+			}
+		}
+	}
+	
 	public void save() {
 		String lines[] = new String[entries.size()];
 		int i = 0;
@@ -70,7 +84,7 @@ public class YMLFile {
 		FileHandler.saveLines(file, lines);
 	}
 	
-	private int getLineSpaces(String string) {
+	private int getLayer(String string) {
 		int spaces = 0;
 		for(int j = 0; j < string.length(); j++) {
 			if(string.charAt(j) == ' ') {
@@ -80,23 +94,6 @@ public class YMLFile {
 			}
 		}
 		return spaces / 4;
-	}
-	
-	private String getFullKey(String prefix, String key) {
-		String fullkey = "";
-		String keys[];
-		if(prefix.split("\\.").length > 0) {
-			keys = prefix.split("\\.");
-		} else {
-			keys = new String[1];
-			keys[0] = prefix;
-		}
-		for(int i = 0; i < getLineSpaces(key); i++) {
-			fullkey += keys[i];
-			if(i < getLineSpaces(key)) fullkey += ".";
-		}
-		fullkey += key.substring(getLineSpaces(key) * 4);
-		return fullkey;
 	}
 
 }
