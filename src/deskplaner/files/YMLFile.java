@@ -1,6 +1,7 @@
 package deskplaner.files;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -55,7 +56,7 @@ public class YMLFile {
 				int layer = getLayer(lines[i]);
 				String name = lines[i].split(":", 2)[0];
 				name = name.substring(layer * 4);
-				if(key.split("\\.").length > layer && layer != 0) {
+				if(key.split("\\.").length >= layer + 1) {
 					String keys[] = key.split("\\.");
 					key = "";
 					for (int j = 0; j < layer; j++) {
@@ -75,13 +76,29 @@ public class YMLFile {
 	}
 	
 	public void save() {
+		String output = "";
 		String lines[] = new String[entries.size()];
 		int i = 0;
 		for (String key : entries.keySet()) {
-			lines[i] = key + ": " + entries.get(key).toString();
+			lines[i] = key;
 			i++;
 		}
-		FileHandler.saveLines(file, lines);
+		Arrays.sort(lines);
+		String key = "";
+		for (int j = 0; j < lines.length; j++) {
+			String keylist[] = lines[j].split("\\.");
+			for (int k = 0; k < keylist.length; k++) {
+				if(!containsKey(key, keylist[k])) {
+					if(k < keylist.length - 1) {
+						output = calculateLayer(k, keylist[k], "", output);
+					} else {
+						output = calculateLayer(k, keylist[k], entries.get(lines[j]).toString(), output);
+					}
+				}
+			}
+			key = lines[j];
+		}
+		FileHandler.saveString(file, output);
 	}
 	
 	private int getLayer(String string) {
@@ -94,6 +111,31 @@ public class YMLFile {
 			}
 		}
 		return spaces / 4;
+	}
+	
+	private boolean containsKey(String key, String name) {
+		String keys[] = key.split("\\.");
+		for (int i = 0; i < keys.length; i++) {
+			if(keys[i].equals(name)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	private String calculateLayer(int layer, String name, String value, String output) {
+		if(!output.equals("")) {
+			output += "\n";
+		}
+		for (int i = 0; i < layer; i++) {
+			output += "    ";
+		}
+		if(value.equals("")) {
+			output += name + ":";
+		} else {
+			output += name + ": " + value;
+		}
+		return output;
 	}
 
 }
