@@ -26,11 +26,49 @@ public class YMLFile {
 		}
 	}
 	
+	public void set(String key, boolean value) {
+		entries.put(key, value);
+	}
+	
+	public void set(String key, int value) {
+		entries.put(key, value);
+	}
+	
+	public void set(String key, double value) {
+		entries.put(key, value);
+	}
+	
 	public String getString(String key) {
 		try {
 			return entries.get(key).toString();
 		} catch (Exception exception) {
 			return null;
+		}
+	}
+	
+	public boolean getBoolean(String key) {
+		if(entries.get(key) instanceof Boolean) {
+			return (boolean) entries.get(key);
+		} else {
+			return false;
+		}
+	}
+	
+	public int getInteger(String key) {
+		if(entries.get(key) instanceof Integer) {
+			return (int) entries.get(key);
+		} else {
+			return 0;
+		}
+	}
+	
+	public double getDouble(String key) {
+		if(entries.get(key) instanceof Integer) {
+			return (int) entries.get(key);
+		} else if(entries.get(key) instanceof Double) {
+			return (double) entries.get(key);
+		} else {
+			return 0;
 		}
 	}
 	
@@ -68,7 +106,22 @@ public class YMLFile {
 				key += name;
 				if(lines[i].split(": ", 2).length > 1) {
 					String value = lines[i].split(": ", 2)[1];
-					entries.put(key, value);
+					if(value.equals("true")) {
+						entries.put(key, true);
+					} else if(value.equals("false")) {
+						entries.put(key, false);
+					} else if(isInteger(value)) {
+						entries.put(key, Integer.parseInt(value));
+					} else if(isDouble(value)) {
+						entries.put(key, Double.parseDouble(value));
+					} else {
+						if((value.startsWith("'") && value.endsWith("'")) || (value.startsWith("\"") && value.endsWith("\""))) {
+							String valuestring = value.substring(1, value.length() - 1);
+							entries.put(key, valuestring);
+						} else {
+							entries.put(key, value);
+						}
+					}
 				}
 				
 			}
@@ -92,7 +145,16 @@ public class YMLFile {
 					if(k < keylist.length - 1) {
 						output = calculateLayer(k, keylist[k], "", output);
 					} else {
-						output = calculateLayer(k, keylist[k], entries.get(lines[j]).toString(), output);
+						Object value = entries.get(lines[j]);
+						if(value instanceof String) {
+							if(isDouble(value.toString()) || isInteger(value.toString()) || isBoolean(value.toString()) || value.equals("")) {
+								output = calculateLayer(k, keylist[k], "'" + value.toString() + "'", output);
+							} else {
+								output = calculateLayer(k, keylist[k], value.toString(), output);
+							}
+						} else {
+							output = calculateLayer(k, keylist[k], value.toString(), output);
+						}
 					}
 				}
 			}
@@ -136,6 +198,37 @@ public class YMLFile {
 			output += name + ": " + value;
 		}
 		return output;
+	}
+	
+	private boolean isBoolean(String string) {
+		if(string.equals("true") || string.equals("false")) {
+			return true;
+		}
+		return false;
+	}
+	
+	private boolean isInteger(String string) {
+		if (string == null) {
+	        return false;
+	    }
+	    try {
+	        Integer.parseInt(string);
+	    } catch (NumberFormatException exception) {
+	        return false;
+	    }
+	    return true;
+	}
+	
+	private boolean isDouble(String string) {
+		if (string == null) {
+	        return false;
+	    }
+	    try {
+	    	Double.parseDouble(string);
+	    } catch (NumberFormatException exception) {
+	        return false;
+	    }
+	    return true;
 	}
 
 }
