@@ -1,7 +1,6 @@
 package deskplaner.commands;
 
 import java.io.File;
-
 import deskplaner.handler.CommandHandler;
 import deskplaner.util.Command;
 
@@ -9,7 +8,7 @@ public class HelpCommand implements Command {
 
 	@Override
 	public boolean onCommand(String label, String[] args, File directory) {
-		CommandHandler.sendConsoleOutput(getCommandHelp());
+		CommandHandler.sendConsoleOutputBlock(getCommandHelp());
 		return true;
 	}
 

@@ -23,7 +23,7 @@ public class CommandHandler {
 		for(String string : commands.keySet()) {
 			if(string.equalsIgnoreCase(label)) {
 				if(args.length > 0 && args[0].equalsIgnoreCase("help")) {
-					sendConsoleOutput(commands.get(string).getCommandHelp());
+					sendConsoleOutputBlock(commands.get(string).getCommandHelp());
 					return true;
 				}
 				return commands.get(string).onCommand(string, args, FileHandler.getCurrentDirectory());
@@ -34,6 +34,13 @@ public class CommandHandler {
 	
 	public static HashMap<String, Command> getCommands() {
 		return commands;
+	}
+	
+	public static Command getCommand(String string) {
+		if(commands.containsKey(string)) {
+			return commands.get(string);
+		}
+		return null;
 	}
 	
 	public static boolean getCondition(String args[], String condition, int position) {
@@ -51,5 +58,22 @@ public class CommandHandler {
 	public static void sendConsoleOutput(Object object) {
 		System.out.println(object);
 	}
+	
+	public static void sendConsoleOutputBlock(String string) {
+		String lines[] = string.split("\n");
+		int lenght = 0;
+		for (int i = 0; i < lines.length; i++) {
+			if (lines[i].length() > lenght) {
+				lenght = lines[i].length();
+			}
+		}
+		String seperator = "";
+		for (int i = 0; i < lenght + 3; i++) {
+			seperator += "-";
+		}
+		System.out.println(seperator + "\n" + string + "\n" + seperator);
+	}
+	
+	
 
 }
