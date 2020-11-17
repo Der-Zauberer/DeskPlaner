@@ -3,19 +3,14 @@ package deskplaner.util;
 import java.io.File;
 import java.util.ArrayList;
 import deskplaner.handler.FileHandler;
-import deskplaner.tools.NotesTool;
 
 public class Note {
 	
 	private static ArrayList<Note> notes = new ArrayList<>();
-	private static NotesTool tool;
+	private static File directory = FileHandler.createDirectory("\\tools\\notes");
 	private String name;
 	private ArrayList<Tag> tags = new ArrayList<Tag>();
 	private String text;
-	
-	public static void initialize(NotesTool tool) {
-		Note.tool = tool;
-	}
 	
 	public Note(String name, String text) {
 		this.name = name;
@@ -72,7 +67,7 @@ public class Note {
 	}
 	
 	public static void loadNotes() {
-		for(File file : tool.getFiles()) {
+		for(File file : directory.listFiles()) {
 			String name = file.getName().substring(0, file.getName().length() - 4);
 			String text = FileHandler.readString(file);
 			new Note(name, text);
@@ -81,20 +76,20 @@ public class Note {
 	
 	private void saveNote(String oldname, String newname, String text) {
 		if(oldname != null && !oldname.equals(newname)) {
-			for(File file : tool.getFiles()) {
+			for(File file : directory.listFiles()) {
 				if(file.getName().equals(oldname + ".txt")) {
-					File newfile = new File(tool.getToolDirectory() + "\\" + newname + ".txt");
+					File newfile = new File(directory + "\\" + newname + ".txt");
 					FileHandler.saveString(newfile, text);
 					file.delete();
 				}
 			}
 		} else {
-			FileHandler.saveString(new File(tool.getToolDirectory() + "\\" + newname + ".txt"), text);
+			FileHandler.saveString(new File(directory + "\\" + newname + ".txt"), text);
 		}
 	}
 	
 	private void deleteNote(String name) {
-		File file = new File(tool.getToolDirectory() + "\\" + name + ".txt");
+		File file = new File(directory + "\\" + name + ".txt");
 		if(file.exists()) file.delete();
 	}
 	

@@ -14,7 +14,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.BorderPane;
 
-public class EditorTool extends Scene {
+public class EditorScene extends Scene {
 	
 	private static BorderPane borderpane = new BorderPane();
 	private static ToolBar toolbar = new ToolBar();
@@ -24,7 +24,7 @@ public class EditorTool extends Scene {
 	private static TextArea textarea = new TextArea();
 	private static HashMap<Integer, File> files = new HashMap<>();
 	
-	public EditorTool() {
+	public EditorScene() {
 		super(borderpane);		
 		borderpane.setTop(toolbar);
 		borderpane.setLeft(navigation);
@@ -106,7 +106,7 @@ public class EditorTool extends Scene {
 		textarea.prefWidthProperty().bind(scrollpane.widthProperty());
 		textarea.prefHeightProperty().bind(scrollpane.heightProperty());
 		scrollpane.setContent(textarea);
-		tab.setOnSelectionChanged(event -> {EditorTool.textarea = textarea;});
+		tab.setOnSelectionChanged(event -> {EditorScene.textarea = textarea;});
 		tabpane.getTabs().add(tab);
 		tabpane.getSelectionModel().select(tab);
 		files.put(tabpane.getTabs().indexOf(tab), new File(FileHandler.createDirectory("\\home").toString() + "\\unnamed.txt"));

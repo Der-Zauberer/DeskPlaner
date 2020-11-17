@@ -1,12 +1,10 @@
 package deskplaner.tools;
 
 import java.util.ArrayList;
-
 import deskplaner.gui.Card;
 import deskplaner.gui.FlowLayout;
 import deskplaner.resources.Resource;
 import deskplaner.util.Note;
-import deskplaner.util.Tool;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -16,21 +14,19 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 
-public class NotesTool extends Tool {
+public class NotesScene extends Scene {
 	
 	private static FlowLayout layout = new FlowLayout();
 	
-	public NotesTool() {
-		super("Notes");
-		Note.initialize(this);
+	public NotesScene() {
+		super(layout);
 		Note.loadNotes();
 		initializeGui();
 		reloadGuiNotes();
 	}
 	
 	private void initializeGui() {
-		this.setScene(new Scene(layout));
-		this.getScene().getStylesheets().add(Resource.getStyleSheet("style.css"));
+		this.getStylesheets().add(Resource.getStyleSheet("style.css"));
 	}
 	
 	public void reloadGuiNotes() {

@@ -1,6 +1,7 @@
 package deskplaner.main;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 import deskplaner.commands.BrowserCommand;
 import deskplaner.commands.CDCommand;
@@ -14,9 +15,8 @@ import deskplaner.gui.DeskNavigation;
 import deskplaner.gui.DeskStage;
 import deskplaner.handler.CommandHandler;
 import deskplaner.handler.FileHandler;
-import deskplaner.tools.DashboardTool;
-import deskplaner.tools.NotesTool;
-import deskplaner.util.Tool;
+import deskplaner.tools.DashboardScene;
+import deskplaner.tools.NotesScene;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -28,7 +28,7 @@ public class DeskPlaner extends Application {
 	private static final String[] AUTHORS = {"Der_Zauberer"};
 	
 	private static Stage stage;
-	private static ArrayList<Tool> tools = new ArrayList<>();
+	private static HashMap<String, Scene> scenes = new HashMap<>();
 	
 	
 	public static void main(String[] args) {
@@ -44,7 +44,7 @@ public class DeskPlaner extends Application {
 		registerScenes();
 		stage = new DeskStage(getName(), false, true);
 		DeskPlaner.stage = stage;
-		stage.setScene(getTool("Dashboard").getScene());
+		stage.setScene(getScene("Dashboard"));
 		stage.show();
 	}
 	
@@ -82,26 +82,36 @@ public class DeskPlaner extends Application {
 	}
 	
 	private static void registerScenes() {
-		registerTool(new DashboardTool());
-		registerTool(new NotesTool());
+		registerScene("Dashboard", new DashboardScene());
+		registerScene("Notes", new NotesScene());
 		DeskNavigation.updateNavigation();
 	}
 	
-	public static void registerTool(Tool tool) {
-		tools.add(tool);
+	public static void registerScene(String name, Scene scene) {
+		scenes.put(name, scene);
 	}
 	
-	public static Tool getTool(String name) {
-		for (Tool tool : tools) {
-			if(tool.getName().equals(name)) {
-				return tool;
-			}
+	public static ArrayList<Scene> getScenes() {
+		ArrayList<Scene> scenes = new ArrayList<Scene>();
+		for (String name : DeskPlaner.scenes.keySet()) {
+			scenes.add(DeskPlaner.scenes.get(name));
+		}
+		return scenes;
+	}
+	
+	public static ArrayList<String> getSceneNames() {
+		ArrayList<String> names = new ArrayList<String>();
+		for (String name : DeskPlaner.scenes.keySet()) {
+			names.add(name);
+		}
+		return names;
+	}
+	
+	public static Scene getScene(String name) {
+		if(scenes.keySet().contains(name)) {
+			return scenes.get(name);
 		}
 		return null;
-	}
-	
-	public static ArrayList<Tool> getTools() {
-		return tools;
 	}
 		
 	public static Stage getStage() {
@@ -112,7 +122,7 @@ public class DeskPlaner extends Application {
 		stage.setScene(scene);
 	}
 	
-	public static Scene getScene() {
+	public static Scene getActiveScene() {
 		return stage.getScene();
 	}
 	
