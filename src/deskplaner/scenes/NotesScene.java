@@ -1,4 +1,4 @@
-package deskplaner.tools;
+package deskplaner.scenes;
 
 import java.util.ArrayList;
 import deskplaner.gui.Card;

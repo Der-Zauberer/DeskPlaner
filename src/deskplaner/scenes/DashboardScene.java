@@ -1,4 +1,4 @@
-package deskplaner.tools;
+package deskplaner.scenes;
 
 import deskplaner.gui.Card;
 import deskplaner.gui.DeskNavigation;
