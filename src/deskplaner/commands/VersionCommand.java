@@ -12,7 +12,7 @@ public class VersionCommand implements Command {
 		String string = DeskPlaner.getName() + " " + DeskPlaner.getVersion() + "\n";
 		string += "By " + DeskPlaner.getAuthorsAsString() + "\n";
 		string += "Running DeskPlaner on " + System.getProperty("os.name");
-		CommandHandler.sendConsoleOutputBlock(string);
+		CommandHandler.sendConsoleOutput(string);
 		return true;
 	}
 

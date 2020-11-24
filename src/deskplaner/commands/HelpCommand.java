@@ -8,7 +8,7 @@ public class HelpCommand implements Command {
 
 	@Override
 	public boolean onCommand(String label, String[] args, File directory) {
-		CommandHandler.sendConsoleOutputBlock(getCommandHelp());
+		CommandHandler.sendConsoleOutput(getCommandHelp());
 		return true;
 	}
 

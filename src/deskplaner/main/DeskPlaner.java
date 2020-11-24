@@ -8,6 +8,7 @@ import deskplaner.commands.CDCommand;
 import deskplaner.commands.HelpCommand;
 import deskplaner.commands.LSCommand;
 import deskplaner.commands.MkDirCommand;
+import deskplaner.commands.NoteCommand;
 import deskplaner.commands.RMCommand;
 import deskplaner.commands.VariableCommand;
 import deskplaner.commands.VersionCommand;
@@ -76,6 +77,7 @@ public class DeskPlaner extends Application {
 		CommandHandler.registerCommand("help", new HelpCommand());
 		CommandHandler.registerCommand("ls", new LSCommand());
 		CommandHandler.registerCommand("mkdir", new MkDirCommand());
+		CommandHandler.registerCommand("note", new NoteCommand());
 		CommandHandler.registerCommand("rm", new RMCommand());
 		CommandHandler.registerCommand("variable", new VariableCommand());
 		CommandHandler.registerCommand("version", new VersionCommand());
