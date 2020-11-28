@@ -38,7 +38,7 @@ public class EditorScene extends Scene {
 			addTab("unnamed.txt", "");
 		}));
 		toolbar.getItems().add(NodeBuilder.createButton("Open", event -> {
-			File file = NodeBuilder.createFileChooser("Open", "").showSaveDialog(DeskPlaner.getStage());
+			File file = NodeBuilder.createFileChooser("Open", "").showOpenDialog(DeskPlaner.getStage());
 			if(file != null) addTab(file);
 		}));
 		toolbar.getItems().add(NodeBuilder.createButton("Refresh", event -> {
