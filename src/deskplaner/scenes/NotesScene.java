@@ -40,7 +40,15 @@ public class NotesScene extends Scene {
 			createGuiNote(note);
 		}
 		btadd.setOnAction(event -> {
-			createGuiNote(new Note("Unnamed", "Text here..."));
+			if(Note.getNote("Unnamed") == null) {
+				createGuiNote(new Note("Unnamed", "Text here..."));
+			} else {
+				int i = 1;
+				while (Note.getNote("Unnamed" + i) != null) {
+					i++;
+				}
+				createGuiNote(new Note("Unnamed" + i, "Text here..."));
+			}
 		});
 		tfsearch.setOnAction(event -> {
 			ArrayList<Node> nodes = new ArrayList<>();
