@@ -31,7 +31,7 @@ public class BrowserCommand implements Command{
 	@Override
 	public String getCommandHelp() {
 		String string = "browser [url] Open a website in the mainbrowser of the operating system.\n";
-		string += "url\tString\t\tThe url to open the website\n";
+		string += "url&emsp;String\t\tThe url to open the website\n";
 		string += "url\tString\t\tThe name of the path variable\n";
 		string += "-np\tModifier\tBypass automatic https or http protocoll (No Protocoll)";
 		return string;
