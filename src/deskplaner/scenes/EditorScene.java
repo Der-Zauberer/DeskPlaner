@@ -17,6 +17,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
@@ -153,7 +154,7 @@ public class EditorScene extends Scene {
 	}
 	
 	private void showDeleteDialog() {
-		if(!tabpane.getSelectionModel().isEmpty()) {
+		if(!tabpane.getSelectionModel().isEmpty() && files.get(tabpane.getSelectionModel().getSelectedItem()) != null) {
 			File file = files.get(tabpane.getSelectionModel().getSelectedItem());
 			Label label = new Label("Are you sure you want to delete this file? " + file.getName());
 			label.setPadding(new Insets(20));
@@ -168,6 +169,7 @@ public class EditorScene extends Scene {
 			Scene scene = new Scene(vbox);
 			Stage stage = new Stage();
 			stage.setScene(scene);
+			stage.setResizable(false);
 			stage.show();
 			buttonOk.setOnAction(event -> {
 				tabpane.getTabs().remove(tabpane.getSelectionModel().getSelectedItem());
@@ -185,7 +187,6 @@ public class EditorScene extends Scene {
 		if(!tabpane.getSelectionModel().isEmpty()) {
 			File file = files.get(tabpane.getSelectionModel().getSelectedItem());
 			Label label = new Label("File name:");
-			label.setPadding(new Insets(20));
 			TextField textfield = new TextField();
 			textfield.setText(tabpane.getSelectionModel().getSelectedItem().getText());
 			Button buttonOk = new Button("Ok");
@@ -193,12 +194,18 @@ public class EditorScene extends Scene {
 			Pane pane = new Pane();
 			HBox.setHgrow(pane, Priority.SOMETIMES);
 			ToolBar toolbar = new ToolBar();
-			toolbar.getItems().addAll(pane, textfield, buttonCancel, buttonOk);
+			toolbar.getItems().addAll(pane, buttonCancel, buttonOk);
+			GridPane gridpane = new GridPane();
+			gridpane.setPadding(new Insets(20));
+			gridpane.setVgap(10);
+			gridpane.add(label, 0, 0);
+			gridpane.add(textfield, 0, 1);
 			VBox vbox = new VBox();
-			vbox.getChildren().addAll(label, toolbar);
+			vbox.getChildren().addAll(gridpane, toolbar);
 			Scene scene = new Scene(vbox);
 			Stage stage = new Stage();
 			stage.setScene(scene);
+			stage.setResizable(false);
 			stage.show();
 			buttonOk.setOnAction(event -> {
 				if(!textfield.getText().isBlank()) {
