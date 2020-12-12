@@ -49,11 +49,9 @@ public class EditorScene extends Scene {
 		Button buttonRefresh = new Button("Refresh");
 		Button buttonSave = new Button("Save");
 		Button buttonSaveAs = new Button("SaveAs");
-		Pane pane1 = new Pane();
-		Pane pane2 = new Pane();
+		Pane pane = new Pane();
 		Button buttonDelete = new Button("Delete");
 		Button buttonRename = new Button("Rename");
-		Button buttonRun = new Button("Run");
 		buttonNew.setOnAction(event -> {
 			addTab("unnamed.txt", "");
 		});
@@ -90,15 +88,14 @@ public class EditorScene extends Scene {
 			}
 			refreshNavigation();
 		});
-		pane1.setPrefWidth(10);
-		pane2.setPrefWidth(10);
+		pane.setPrefWidth(10);
 		buttonDelete.setOnAction(event -> {
 			showDeleteDialog();
 		});
 		buttonRename.setOnAction(event -> {
 			showRenameDialog();
 		});
-		toolbar.getItems().addAll(buttonNew, buttonOpen, buttonRefresh, buttonSave, buttonSaveAs, pane1, buttonDelete, buttonRename, pane2, buttonRun); 
+		toolbar.getItems().addAll(buttonNew, buttonOpen, buttonRefresh, buttonSave, buttonSaveAs, pane, buttonDelete, buttonRename); 
 	}
 	
 	private void refreshNavigation() {
@@ -169,6 +166,7 @@ public class EditorScene extends Scene {
 			Scene scene = new Scene(vbox);
 			Stage stage = new Stage();
 			stage.setScene(scene);
+			stage.setTitle("Delete");
 			stage.setResizable(false);
 			stage.show();
 			buttonOk.setOnAction(event -> {
@@ -189,6 +187,7 @@ public class EditorScene extends Scene {
 			Label label = new Label("File name:");
 			TextField textfield = new TextField();
 			textfield.setText(tabpane.getSelectionModel().getSelectedItem().getText());
+			textfield.setPrefWidth(200);
 			Button buttonOk = new Button("Ok");
 			Button buttonCancel = new Button("Cancel");
 			Pane pane = new Pane();
@@ -205,6 +204,7 @@ public class EditorScene extends Scene {
 			Scene scene = new Scene(vbox);
 			Stage stage = new Stage();
 			stage.setScene(scene);
+			stage.setTitle("Rename");
 			stage.setResizable(false);
 			stage.show();
 			buttonOk.setOnAction(event -> {
